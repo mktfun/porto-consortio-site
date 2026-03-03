@@ -7,6 +7,16 @@ import {
   Building2, Factory, ShoppingCart, Warehouse,
   Ban, TrendingDown, FileWarning, Scale,
 } from "lucide-react";
+
+// Logos
+import jjamorimLogo from "@/assets/jjamorim-logo.png";
+import bradescoLogo from "@/assets/bradesco-seguros.svg";
+import hdiLogo from "@/assets/hdi-seguros.png";
+import allianzLogo from "@/assets/allianz.png";
+import azulLogo from "@/assets/azul-seguros.png";
+import sompoLogo from "@/assets/sompo.png";
+import yelumLogo from "@/assets/yelum.png";
+import tokioMarineLogo from "@/assets/tokio-marine.png";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from "recharts";
@@ -97,14 +107,7 @@ function Header() {
     >
       <div className="mx-auto max-w-6xl px-5 flex h-16 items-center justify-between">
         <a href="#" className="flex items-center gap-2.5 group">
-          {/* TODO: Substituir pelo logo real da JJ&Amorim quando disponível */}
-          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center transition-transform group-hover:scale-105 shadow-md shadow-primary/20">
-            <span className="text-[13px] font-black text-primary-foreground tracking-tight leading-none">JJ</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[14px] font-bold tracking-tight text-foreground leading-tight">JJ & Amorim</span>
-            <span className="text-[9px] font-medium text-muted-foreground tracking-wide uppercase">Corretora de Seguros</span>
-          </div>
+          <img src={jjamorimLogo} alt="JJ & Amorim Corretora de Seguros" className="h-10 w-auto object-contain transition-transform group-hover:scale-105" />
         </a>
 
         <nav className="hidden md:flex items-center gap-8">
@@ -143,7 +146,7 @@ function Header() {
 function Hero() {
   const checks = [
     "Cotação em até 24h",
-    "8+ seguradoras parceiras",
+    "7 seguradoras parceiras",
     "Atendimento especializado",
   ];
 
@@ -229,14 +232,13 @@ function Hero() {
    3. TRUST BAR — marquee animado
    ═══════════════════════════════════════════ */
 const INSURERS = [
-  { name: "Bradesco Seguros", weight: "font-bold" },
-  { name: "HDI Seguros", weight: "font-extrabold" },
-  { name: "SulAmérica", weight: "font-bold" },
-  { name: "Liberty Seguros", weight: "font-extrabold" },
-  { name: "Allianz", weight: "font-black" },
-  { name: "Tokio Marine", weight: "font-bold" },
-  { name: "Azul Seguros", weight: "font-extrabold" },
-  { name: "Sompo Seguros", weight: "font-bold" },
+  { name: "Bradesco Seguros", logo: bradescoLogo },
+  { name: "HDI Seguros", logo: hdiLogo },
+  { name: "Allianz", logo: allianzLogo },
+  { name: "Azul Seguros", logo: azulLogo },
+  { name: "Sompo Seguros", logo: sompoLogo },
+  { name: "Yelum Seguros", logo: yelumLogo },
+  { name: "Tokio Marine", logo: tokioMarineLogo },
 ];
 
 function TrustBar() {
@@ -247,20 +249,19 @@ function TrustBar() {
           <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.15em] text-center mb-6">
             Parceria com as melhores seguradoras do país
           </p>
-          <div className="overflow-hidden">
-            <div className="marquee-track">
-              {[...INSURERS, ...INSURERS].map((ins, i) => (
-                <div key={i} className="flex-shrink-0 flex items-center gap-2 select-none">
-                  <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
-                    <Shield className="w-4 h-4 text-muted-foreground/60" />
+            <div className="overflow-hidden">
+              <div className="marquee-track">
+                {[...INSURERS, ...INSURERS].map((ins, i) => (
+                  <div key={i} className="flex-shrink-0 flex items-center select-none px-4">
+                    <img
+                      src={ins.logo}
+                      alt={ins.name}
+                      className="h-8 md:h-10 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+                    />
                   </div>
-                  <span className={`text-[15px] ${ins.weight} text-muted-foreground/50 whitespace-nowrap`}>
-                    {ins.name}
-                  </span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
         </div>
       </section>
     </Reveal>
@@ -844,14 +845,7 @@ function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              {/* TODO: Substituir pelo logo real */}
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-sm shadow-primary/20">
-                <span className="text-[11px] font-black text-primary-foreground tracking-tight leading-none">JJ</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-bold text-foreground leading-tight">JJ & Amorim</span>
-                <span className="text-[9px] font-medium text-muted-foreground tracking-wide uppercase">Corretora de Seguros</span>
-              </div>
+              <img src={jjamorimLogo} alt="JJ & Amorim Corretora de Seguros" className="h-10 w-auto object-contain" />
             </div>
             <p className="text-[13px] text-muted-foreground leading-relaxed max-w-sm mb-3">
               Especialistas em seguro de transporte de cargas há mais de 10 anos. Protegemos empresas em todo o Brasil com as melhores seguradoras do mercado.
