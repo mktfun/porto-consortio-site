@@ -91,16 +91,20 @@ function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled
-        ? "bg-white/80 backdrop-blur-xl shadow-[0_1px_0_0_rgba(0,0,0,0.06)]"
+        ? "bg-background/80 backdrop-blur-xl shadow-[0_1px_0_0_hsl(var(--border))]"
         : "bg-transparent"
       }`}
     >
       <div className="mx-auto max-w-6xl px-5 flex h-16 items-center justify-between">
         <a href="#" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-[#3E4095] flex items-center justify-center transition-transform group-hover:scale-105">
-            <Shield className="w-4 h-4 text-white" />
+          {/* TODO: Substituir pelo logo real da JJ&Amorim quando disponível */}
+          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center transition-transform group-hover:scale-105 shadow-md shadow-primary/20">
+            <span className="text-[13px] font-black text-primary-foreground tracking-tight leading-none">JJ</span>
           </div>
-          <span className="text-[15px] font-bold tracking-tight text-[#1e293b]">JJ & Amorim</span>
+          <div className="flex flex-col">
+            <span className="text-[14px] font-bold tracking-tight text-foreground leading-tight">JJ & Amorim</span>
+            <span className="text-[9px] font-medium text-muted-foreground tracking-wide uppercase">Corretora de Seguros</span>
+          </div>
         </a>
 
         <nav className="hidden md:flex items-center gap-8">
@@ -144,48 +148,76 @@ function Hero() {
   ];
 
   return (
-    <section className="relative pt-28 pb-16 md:pt-44 md:pb-32 overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-gradient-to-b from-[#3E4095]/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
+    <section className="relative pt-28 pb-16 md:pt-40 md:pb-28 overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-gradient-to-b from-primary/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
 
       <div className="mx-auto max-w-6xl px-5 relative">
-        <div className="max-w-3xl">
-          {/* Badges */}
-          <div className="flex flex-wrap gap-2.5 mb-8">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#3E4095]/15 text-[#3E4095] text-[11px] font-semibold tracking-wide uppercase animate-fade-up" style={{ animationDelay: "0ms" }}>
-              <Shield className="w-3 h-3" /> Lei 14.599/2023 — Obrigatório
+        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+          {/* Text */}
+          <div>
+            {/* Badges */}
+            <div className="flex flex-wrap gap-2.5 mb-8">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/15 text-primary text-[11px] font-semibold tracking-wide uppercase animate-fade-up" style={{ animationDelay: "0ms" }}>
+                <Shield className="w-3 h-3" /> Lei 14.599/2023 — Obrigatório
+              </div>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-accent/20 text-accent text-[11px] font-semibold tracking-wide uppercase animate-fade-up bg-accent/[0.04]" style={{ animationDelay: "60ms" }}>
+                <Award className="w-3 h-3" /> +10 anos de mercado
+              </div>
             </div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#2EC4B6]/20 text-[#2EC4B6] text-[11px] font-semibold tracking-wide uppercase animate-fade-up bg-[#2EC4B6]/[0.04]" style={{ animationDelay: "60ms" }}>
-              <Award className="w-3 h-3" /> +10 anos de mercado
+
+            <h1 className="text-[clamp(2rem,5vw,3.5rem)] font-black leading-[1.05] tracking-tight text-foreground mb-6 animate-fade-up" style={{ animationDelay: "80ms" }}>
+              Seguro de transporte{" "}
+              <br className="hidden sm:block" />
+              <span className="gradient-text">de cargas.</span>
+            </h1>
+
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl mb-8 animate-fade-up" style={{ animationDelay: "160ms" }}>
+              Cotação rápida e personalizada com as melhores seguradoras do país. Proteja seu patrimônio com quem entende do assunto.
+            </p>
+
+            {/* Checklist inline */}
+            <div className="flex flex-wrap gap-x-5 gap-y-2 mb-10 animate-fade-up" style={{ animationDelay: "200ms" }}>
+              {checks.map((c, i) => (
+                <span key={i} className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-accent" /> {c}
+                </span>
+              ))}
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-3 animate-fade-up" style={{ animationDelay: "240ms" }}>
+              <a href="#form" className="btn-primary px-6 py-3 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2">
+                Solicitar Cotação <ArrowRight className="w-4 h-4" />
+              </a>
+              <a href={WA} target="_blank" rel="noopener noreferrer" className="btn-outline px-6 py-3 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2">
+                <MessageCircle className="w-4 h-4" /> Falar no WhatsApp
+              </a>
             </div>
           </div>
 
-          <h1 className="text-[clamp(2rem,5vw,4rem)] font-black leading-[1.05] tracking-tight text-[#0f172a] mb-6 animate-fade-up" style={{ animationDelay: "80ms" }}>
-            Seguro de transporte{" "}
-            <br className="hidden sm:block" />
-            <span className="gradient-text">de cargas.</span>
-          </h1>
-
-          <p className="text-base md:text-xl text-[#64748b] leading-relaxed max-w-xl mb-8 animate-fade-up" style={{ animationDelay: "160ms" }}>
-            Cotação rápida e personalizada com as melhores seguradoras do país. Proteja seu patrimônio com quem entende do assunto.
-          </p>
-
-          {/* Checklist inline */}
-          <div className="flex flex-wrap gap-x-5 gap-y-2 mb-10 animate-fade-up" style={{ animationDelay: "200ms" }}>
-            {checks.map((c, i) => (
-              <span key={i} className="flex items-center gap-1.5 text-[13px] text-[#475569]">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#2EC4B6]" /> {c}
-              </span>
-            ))}
-          </div>
-
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 animate-fade-up" style={{ animationDelay: "240ms" }}>
-            <a href="#form" className="btn-primary px-6 py-3 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2">
-              Solicitar Cotação <ArrowRight className="w-4 h-4" />
-            </a>
-            <a href={WA} target="_blank" rel="noopener noreferrer" className="btn-outline px-6 py-3 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2">
-              <MessageCircle className="w-4 h-4" /> Falar no WhatsApp
-            </a>
+          {/* Hero Image */}
+          <div className="relative animate-fade-up hidden md:block" style={{ animationDelay: "300ms" }}>
+            <div className="rounded-2xl overflow-hidden shadow-2xl shadow-primary/10">
+              <img
+                src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&h=600&fit=crop&q=80"
+                alt="Caminhão de carga em rodovia brasileira — seguro de transporte de cargas"
+                className="w-full h-[400px] object-cover"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 to-transparent rounded-2xl" />
+            </div>
+            {/* Floating stat */}
+            <div className="absolute -bottom-4 -left-4 bg-background rounded-xl border border-border p-4 shadow-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-accent" />
+                </div>
+                <div>
+                  <p className="text-lg font-black text-foreground">1.000+</p>
+                  <p className="text-[11px] text-muted-foreground">Clientes protegidos</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -196,22 +228,36 @@ function Hero() {
 /* ═══════════════════════════════════════════
    3. TRUST BAR — marquee animado
    ═══════════════════════════════════════════ */
-const INSURERS = ["Bradesco Seguros", "HDI Seguros", "SulAmérica", "Liberty Seguros", "Allianz", "Tokio Marine", "Azul Seguros", "Sompo Seguros"];
+const INSURERS = [
+  { name: "Bradesco Seguros", weight: "font-bold" },
+  { name: "HDI Seguros", weight: "font-extrabold" },
+  { name: "SulAmérica", weight: "font-bold" },
+  { name: "Liberty Seguros", weight: "font-extrabold" },
+  { name: "Allianz", weight: "font-black" },
+  { name: "Tokio Marine", weight: "font-bold" },
+  { name: "Azul Seguros", weight: "font-extrabold" },
+  { name: "Sompo Seguros", weight: "font-bold" },
+];
 
 function TrustBar() {
   return (
     <Reveal>
-      <section className="py-10 border-y border-[#f1f5f9]">
+      <section className="py-10 border-y border-border">
         <div className="mx-auto max-w-6xl px-5">
-          <p className="text-[11px] font-semibold text-[#94a3b8] uppercase tracking-[0.15em] text-center mb-6">
+          <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.15em] text-center mb-6">
             Parceria com as melhores seguradoras do país
           </p>
           <div className="overflow-hidden">
             <div className="marquee-track">
-              {[...INSURERS, ...INSURERS].map((n, i) => (
-                <span key={i} className="flex-shrink-0 text-[15px] font-semibold text-[#cbd5e1] whitespace-nowrap select-none">
-                  {n}
-                </span>
+              {[...INSURERS, ...INSURERS].map((ins, i) => (
+                <div key={i} className="flex-shrink-0 flex items-center gap-2 select-none">
+                  <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
+                    <Shield className="w-4 h-4 text-muted-foreground/60" />
+                  </div>
+                  <span className={`text-[15px] ${ins.weight} text-muted-foreground/50 whitespace-nowrap`}>
+                    {ins.name}
+                  </span>
+                </div>
               ))}
             </div>
           </div>
@@ -249,29 +295,29 @@ function UrgencyData() {
 
   return (
     <Reveal>
-      <section className="py-20 md:py-32 bg-[#fafafa]" ref={ref}>
+      <section className="py-20 md:py-32 bg-muted/50" ref={ref}>
         <div className="mx-auto max-w-6xl px-5">
-          <p className="text-[11px] font-semibold text-[#3E4095] uppercase tracking-[0.15em] mb-4">Dados do setor</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#0f172a] mb-4 max-w-2xl">
+          <p className="text-[11px] font-semibold text-primary uppercase tracking-[0.15em] mb-4">Dados do setor</p>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4 max-w-2xl">
             O transporte de cargas no Brasil é de alto risco.
           </h2>
-          <p className="text-sm md:text-base text-[#64748b] max-w-xl mb-12">
+          <p className="text-sm md:text-base text-muted-foreground max-w-xl mb-12">
             Acidentes, roubos e avarias acontecem todos os dias nas rodovias brasileiras. Proteja sua operação com dados reais.
           </p>
 
           <div className="grid md:grid-cols-2 gap-10 items-center">
             {/* Chart */}
-            <div className="bg-white rounded-2xl border border-[#f1f5f9] p-5 md:p-7">
-              <p className="text-xs font-semibold text-[#94a3b8] uppercase tracking-wider mb-5">Acidentes com caminhões por ano (Brasil)</p>
+            <div className="bg-background rounded-2xl border border-border p-5 md:p-7">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-5">Acidentes com caminhões por ano (Brasil)</p>
               <div className="h-64 md:h-72">
                 {animate && (
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={ACCIDENT_DATA} barCategoryGap="20%">
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                      <XAxis dataKey="year" tick={{ fontSize: 12, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                      <XAxis dataKey="year" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`} />
                       <Tooltip
-                        contentStyle={{ borderRadius: 12, border: "1px solid #f1f5f9", fontSize: 13 }}
+                        contentStyle={{ borderRadius: 12, border: "1px solid hsl(var(--border))", fontSize: 13 }}
                         formatter={(value: number) => [value.toLocaleString("pt-BR"), "Acidentes"]}
                       />
                       <Bar dataKey="acidentes" radius={[6, 6, 0, 0]} animationDuration={1400}>
@@ -283,29 +329,38 @@ function UrgencyData() {
                   </ResponsiveContainer>
                 )}
               </div>
-              <p className="text-[10px] text-[#cbd5e1] mt-3">Fonte: PRF / CNT — Dados consolidados</p>
+              <p className="text-[10px] text-muted-foreground/50 mt-3">Fonte: PRF / CNT — Dados consolidados</p>
             </div>
 
-            {/* Counters */}
+            {/* Counters + Image */}
             <div className="space-y-8">
+              {/* Contextual image */}
+              <div className="rounded-xl overflow-hidden mb-6">
+                <img
+                  src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=250&fit=crop&q=80"
+                  alt="Operação logística de transporte de cargas — riscos nas rodovias"
+                  className="w-full h-[160px] object-cover rounded-xl"
+                  loading="lazy"
+                />
+              </div>
               {[
                 { value: 68475, label: "Acidentes com caminhões em 2023", suffix: "" },
                 { value: 22400, label: "Roubos de carga registrados em 2023", suffix: "+" },
                 { value: 5200, label: "Mortes em acidentes rodoviários em 2023", suffix: "+" },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#3E4095]/[0.06] flex items-center justify-center flex-shrink-0">
-                    <AlertTriangle className={`w-5 h-5 ${i === 2 ? "text-red-500" : "text-[#3E4095]"}`} />
+                  <div className="w-12 h-12 rounded-xl bg-primary/[0.06] flex items-center justify-center flex-shrink-0">
+                    <AlertTriangle className={`w-5 h-5 ${i === 2 ? "text-destructive" : "text-primary"}`} />
                   </div>
                   <div>
-                    <div className="text-3xl md:text-4xl font-black text-[#0f172a]">
+                    <div className="text-3xl md:text-4xl font-black text-foreground">
                       <Counter to={item.value} suffix={item.suffix} />
                     </div>
-                    <p className="text-sm text-[#64748b] mt-0.5">{item.label}</p>
+                    <p className="text-sm text-muted-foreground mt-0.5">{item.label}</p>
                   </div>
                 </div>
               ))}
-              <a href="#form" className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#3E4095] mt-2 hover:gap-3 transition-all">
+              <a href="#form" className="inline-flex items-center gap-2 text-[13px] font-semibold text-primary mt-2 hover:gap-3 transition-all">
                 Proteja sua carga agora <ChevronRight className="w-3.5 h-3.5" />
               </a>
             </div>
@@ -745,19 +800,30 @@ function FormSection() {
 function FinalCTA() {
   return (
     <Reveal>
-      <section className="py-20 md:py-32 bg-[#0f172a] text-white">
-        <div className="mx-auto max-w-6xl px-5 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-5">
+      <section className="relative py-20 md:py-32 overflow-hidden">
+        {/* Background image with overlay */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1400&h=600&fit=crop&q=80"
+            alt=""
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-foreground/85" />
+        </div>
+
+        <div className="mx-auto max-w-6xl px-5 text-center relative z-10">
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-5 text-primary-foreground">
             Garanta a segurança da sua carga.
           </h2>
-          <p className="text-lg text-white/50 max-w-xl mx-auto mb-10">
+          <p className="text-lg text-primary-foreground/50 max-w-xl mx-auto mb-10">
             Solicite uma cotação sem compromisso e proteja seu patrimônio com as melhores seguradoras do mercado.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="#form" className="bg-white text-[#0f172a] px-7 py-3.5 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2 hover:bg-white/90 transition-all">
+            <a href="#form" className="bg-background text-foreground px-7 py-3.5 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2 hover:bg-background/90 transition-all">
               Solicitar Cotação <ArrowRight className="w-4 h-4" />
             </a>
-            <a href={WA} target="_blank" rel="noopener noreferrer" className="border border-white/20 text-white px-7 py-3.5 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2 hover:bg-white/5 transition-all">
+            <a href={WA} target="_blank" rel="noopener noreferrer" className="border border-primary-foreground/20 text-primary-foreground px-7 py-3.5 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2 hover:bg-primary-foreground/5 transition-all">
               <MessageCircle className="w-4 h-4" /> Falar no WhatsApp
             </a>
           </div>
@@ -772,21 +838,25 @@ function FinalCTA() {
    ═══════════════════════════════════════════ */
 function Footer() {
   return (
-    <footer className="py-16 border-t border-[#f1f5f9]">
+    <footer className="py-16 border-t border-border">
       <div className="mx-auto max-w-6xl px-5">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-7 h-7 rounded-md bg-[#3E4095] flex items-center justify-center">
-                <Shield className="w-3.5 h-3.5 text-white" />
+              {/* TODO: Substituir pelo logo real */}
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-sm shadow-primary/20">
+                <span className="text-[11px] font-black text-primary-foreground tracking-tight leading-none">JJ</span>
               </div>
-              <span className="text-sm font-bold text-[#1e293b]">JJ & Amorim Corretora de Seguros</span>
+              <div className="flex flex-col">
+                <span className="text-sm font-bold text-foreground leading-tight">JJ & Amorim</span>
+                <span className="text-[9px] font-medium text-muted-foreground tracking-wide uppercase">Corretora de Seguros</span>
+              </div>
             </div>
-            <p className="text-[13px] text-[#94a3b8] leading-relaxed max-w-sm mb-3">
+            <p className="text-[13px] text-muted-foreground leading-relaxed max-w-sm mb-3">
               Especialistas em seguro de transporte de cargas há mais de 10 anos. Protegemos empresas em todo o Brasil com as melhores seguradoras do mercado.
             </p>
-            <p className="text-[12px] text-[#cbd5e1]">CNPJ: 21.364.352/0001-04</p>
+            <p className="text-[12px] text-muted-foreground/50">CNPJ: 21.364.352/0001-04</p>
           </div>
 
           {/* Links */}
