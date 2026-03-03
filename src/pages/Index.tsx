@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 import {
-    Sun, Moon, ArrowRight, Phone, ShieldCheck, AlertTriangle, Truck, Package, Ship, Star, StarHalf, Lock, Facebook, Camera, Briefcase, Mail, MapPin, CheckCircle2, Loader2, MessageCircle
+    Sun, Moon, ArrowRight, Phone, ShieldCheck, AlertTriangle, Truck, Package, Ship, Star, StarHalf, Lock, Facebook, Instagram, Briefcase, Mail, MapPin, CheckCircle2, Loader2, MessageCircle
 } from "lucide-react";
 
 export default function Index() {
@@ -60,7 +59,7 @@ export default function Index() {
                                 className="w-10 h-10 bg-gradient-to-br from-[#3b5bdb] to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
                                 JJ</div>
                             <span className="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white">JJ <span
-                                className="text-[#3b5bdb]">&amp;</span> Amorim</span>
+                                className="text-[#3b5bdb]">&</span> Amorim</span>
                         </div>
                         <div className="hidden md:flex space-x-8 text-sm font-medium">
                             <a className="text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb] dark:hover:text-[#3b5bdb] transition-colors"
@@ -266,9 +265,9 @@ export default function Index() {
                                 Responsabilidade Civil do Transportador Rodoviário de Carga. Cobre danos a terceiros causados
                                 por acidentes como colisão, capotagem e tombamento.
                             </p>
-                            <a className="inline-flex items-center text-sm font-semibold text-[#3b5bdb] hover:text-blue-700" href="#">
+                            <Link className="inline-flex items-center text-sm font-semibold text-[#3b5bdb] hover:text-blue-700" to="/seguros/rctr-c">
                                 Saiba mais <ArrowRight className="w-5 h-5" />
-                            </a>
+                            </Link>
                         </div>
                         <div
                             className="bg-white dark:bg-[#1e293b] rounded-2xl p-8 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 flex flex-col group relative overflow-hidden">
@@ -284,9 +283,9 @@ export default function Index() {
                                 Proteção contra roubo e desaparecimento de carga. Essencial para operações em regiões de risco,
                                 garantindo a reposição do valor da mercadoria.
                             </p>
-                            <a className="inline-flex items-center text-sm font-semibold text-[#3b5bdb] hover:text-blue-700" href="#">
+                            <Link className="inline-flex items-center text-sm font-semibold text-[#3b5bdb] hover:text-blue-700" to="/seguros/rc-dc">
                                 Saiba mais <ArrowRight className="w-5 h-5" />
-                            </a>
+                            </Link>
                         </div>
                         <div
                             className="bg-white dark:bg-[#1e293b] rounded-2xl p-8 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 flex flex-col group">
@@ -299,9 +298,9 @@ export default function Index() {
                                 Responsabilidade Civil de Veículos. Proteção adicional para danos corporais e materiais a
                                 terceiros não transportados.
                             </p>
-                            <a className="inline-flex items-center text-sm font-semibold text-[#3b5bdb] hover:text-blue-700" href="#">
+                            <Link className="inline-flex items-center text-sm font-semibold text-[#3b5bdb] hover:text-blue-700" to="/seguros/auto-frota">
                                 Saiba mais <ArrowRight className="w-5 h-5" />
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -521,42 +520,28 @@ export default function Index() {
                                 10 anos.
                             </p>
                             <div className="flex space-x-4">
-                                <a className="text-slate-400 hover:text-[#3b5bdb] transition-colors" href="#"><span
-                                    className="material-icons-outlined">facebook</span></a>
-                                <a className="text-slate-400 hover:text-[#3b5bdb] transition-colors" href="#"><span
-                                    className="material-icons-outlined">photo_camera</span></a>
-                                <a className="text-slate-400 hover:text-[#3b5bdb] transition-colors" href="#"><span
-                                    className="material-icons-outlined">business_center</span></a>
+                                <a className="text-slate-400 hover:text-[#3b5bdb] transition-colors" href="https://www.facebook.com/jjamorimseguros" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><Facebook className="w-5 h-5" /></a>
+                                <a className="text-slate-400 hover:text-[#3b5bdb] transition-colors" href="https://www.instagram.com/corretorajjamorim/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Instagram className="w-5 h-5" /></a>
                             </div>
                         </div>
                         <div>
                             <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4">Seguros
                             </h3>
                             <ul className="space-y-3">
-                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Auto
-                                    Frota</a></li>
-                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">RCTR-C</a>
-                                </li>
-                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">RC-DC</a>
-                                </li>
-                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Vida em
-                                    Grupo</a></li>
-                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm"
-                                    href="#">Empresarial</a></li>
+                                <li><Link className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm transition-colors" to="/seguros/auto-frota">Auto Frota</Link></li>
+                                <li><Link className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm transition-colors" to="/seguros/rctr-c">RCTR-C</Link></li>
+                                <li><Link className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm transition-colors" to="/seguros/rc-dc">RC-DC</Link></li>
+                                <li><Link className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm transition-colors" to="/seguros/vida-em-grupo">Vida em Grupo</Link></li>
+                                <li><Link className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm transition-colors" to="/seguros/empresarial">Empresarial</Link></li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4">
                                 Institucional</h3>
                             <ul className="space-y-3">
-                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Sobre
-                                    Nós</a></li>
-                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Política
-                                    de Privacidade</a></li>
-                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Termos de
-                                    Uso</a></li>
-                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Trabalhe
-                                    Conosco</a></li>
+                                <li><Link className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm transition-colors" to="/sobre">Sobre Nós</Link></li>
+                                <li><Link className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm transition-colors" to="/privacidade">Política de Privacidade</Link></li>
+                                <li><Link className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm transition-colors" to="/termos">Termos de Uso</Link></li>
                             </ul>
                         </div>
                         <div>
@@ -585,7 +570,7 @@ export default function Index() {
                     <div
                         className="border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
                         <p className="text-slate-400 text-xs mb-4 md:mb-0">
-                            © 2024 JJ &amp; Amorim Corretora de Seguros. Todos os direitos reservados. CNPJ: 21.364.352/0001-04
+                            © {new Date().getFullYear()} JJ & Amorim Corretora de Seguros. Todos os direitos reservados. CNPJ: 21.364.352/0001-04
                         </p>
                         <div className="flex items-center space-x-2 text-slate-400 text-xs">
                             <span className="w-2 h-2 rounded-full bg-green-500"></span>
