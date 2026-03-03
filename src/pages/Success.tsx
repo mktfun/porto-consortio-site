@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
-import { CheckCircle, Search, Phone, Shield, ArrowRight, Star, ExternalLink, Home } from "lucide-react";
+import { CheckCircle, Search, Phone, Shield, ArrowRight, Star, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 
 const steps = [
     {
@@ -24,9 +23,16 @@ const steps = [
 const Success = () => {
     const navigate = useNavigate();
 
+    const handleNewQuote = () => {
+        navigate("/");
+        setTimeout(() => {
+            const el = document.getElementById("cotacao");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+    };
+
     return (
         <div className="min-h-screen bg-background flex flex-col pt-16">
-
             <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-12 md:py-16">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -119,7 +125,7 @@ const Success = () => {
                         className="space-y-3"
                     >
                         <button
-                            onClick={() => window.open(window.location.href, "_self")}
+                            onClick={handleNewQuote}
                             className="w-full py-3.5 px-6 bg-primary text-primary-foreground rounded-xl font-medium transition-all hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-2"
                         >
                             Cotar Outra Carga
@@ -132,29 +138,19 @@ const Success = () => {
                                 className="flex-1 py-3 px-4 border-2 border-primary/20 text-primary rounded-xl font-medium transition-all hover:bg-primary/5 active:scale-[0.98] flex items-center justify-center gap-2"
                             >
                                 <Star className="w-4 h-4" />
-                                <span className="hidden sm:inline">Avaliar</span>
-                                <span className="sm:hidden">Avaliar</span>
+                                Avaliar
                             </button>
                             <button
                                 onClick={() => navigate("/")}
                                 className="flex-1 py-3 px-4 border-2 border-primary/20 text-primary rounded-xl font-medium transition-all hover:bg-primary/5 active:scale-[0.98] flex items-center justify-center gap-2"
                             >
                                 <Home className="w-4 h-4" />
-                                <span>Home</span>
+                                Home
                             </button>
                         </div>
-
-                        <button
-                            onClick={() => window.open("https://jjamorimseguros.com.br", "_blank")}
-                            className="w-full py-2 text-sm text-muted-foreground hover:text-primary transition-colors flex items-center justify-center gap-1.5"
-                        >
-                            <ExternalLink className="w-3.5 h-3.5" />
-                            Site Institucional
-                        </button>
                     </motion.div>
                 </motion.div>
             </main>
-
         </div>
     );
 };
