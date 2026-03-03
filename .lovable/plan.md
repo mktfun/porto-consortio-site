@@ -1,43 +1,34 @@
 
 
-## Plano: Logos reais das seguradoras de transporte na Trust Bar
+## Plano: Melhorias gerais na Landing Page
 
-### O que muda
-O usuario enviou logos reais de 7 seguradoras que atuam em seguro de transporte de cargas. A lista atual inclui "Liberty Seguros" e "SulAmerica" que precisam ser ajustadas (Liberty virou Yelum, SulAmerica nao faz transporte).
+### 1. Logos das seguradoras no Hero
+Substituir os textos placeholder "HDI", "TOKIO", "ALLIANZ", "PORTO" (linhas 121-126 do Index.tsx) por `<img>` tags usando os assets já existentes em `src/assets/`. Usar HDI, Tokio Marine, Allianz e Bradesco (Porto não existe nos assets — substituir por Bradesco ou Sompo).
 
-### Seguradoras corretas (seguro transporte)
-Com base nos logos enviados:
-1. **Bradesco Seguros** — `user-uploads://1580839736wpdm_bradesco-seguros-logo.svg`
-2. **HDI Seguros** — `user-uploads://image-2.png`
-3. **Allianz** — `user-uploads://image-3.png`
-4. **Azul Seguros** — `user-uploads://image-4.png`
-5. **Sompo** — `user-uploads://image-5.png`
-6. **Yelum** (ex-Liberty) — `user-uploads://image-6.png`
-7. **Tokio Marine** — `user-uploads://image-7.png`
+### 2. Logo da JJ&Amorim no Header e Footer
+Substituir o placeholder "JJ" (div azul) no navbar (linha 58-60) e footer (linha 512-514) pelo `<img>` importado de `src/assets/jjamorim-logo.png`.
 
-A primeira imagem (`user-uploads://image.png`) e o logo da JJ&Amorim.
+### 3. Formulário integrado com Supabase
+Alterar `handleSubmit` (linhas 26-48) para inserir o lead na tabela `leads` do Supabase usando o client já configurado. Campos mapeados: `name`, `email`, `phone`, `insurance_type`, `custom_fields` (origem, destino, valor). Após sucesso, redirecionar para `/sucesso`.
 
-### Implementacao
+### 4. Página de Sucesso — botões funcionais
+- "Cotar Outra Carga" → `navigate("/")` com scroll para `#cotacao`
+- "Avaliar" → já funcional (Google Review link)
+- "Home" → já funcional
+- "Site Institucional" → apontar para `/` em vez de URL externa
 
-1. **Copiar todos os 8 assets** para `src/assets/`:
-   - `jjamorim-logo.png` (logo JJ)
-   - `bradesco-seguros.svg`
-   - `hdi-seguros.png`
-   - `allianz.png`
-   - `azul-seguros.png`
-   - `sompo.png`
-   - `yelum.png`
-   - `tokio-marine.png`
+### 5. Header flutuante (ilha suspensa) ao scrollar
+Adicionar estado `scrolled` via `useEffect` + `window.scrollY > 50`. Quando ativo, aplicar classes: `mx-4 mt-2 rounded-2xl shadow-lg border` criando o efeito "ilha flutuante". Transição suave com `transition-all duration-500`. Responsivo no mobile com `mx-2 mt-1 rounded-xl`.
 
-2. **Atualizar `INSURERS` array** em `Index.tsx`: remover SulAmerica e Liberty, adicionar Yelum. Lista final de 7 seguradoras com import de imagem.
+### 6. Auditoria de textos e SEO
+- Corrigir `&amp;` → `&` nos textos renderizados (linhas 101, 314, 342, 516)
+- Atualizar links do navbar para usar rotas reais (`/#produtos`, `/sobre`, `/#cotacao`) em vez de `href="#"`
+- Corrigir CTAs do Hero: "Cotação Rápida" → `href="#cotacao"`, "Falar com Consultor" → link WhatsApp
+- Melhorar meta description no `index.html` para incluir keywords primárias
+- Adicionar `alt` tags descritivas nas imagens das seguradoras
 
-3. **Atualizar Trust Bar**: substituir icone Shield + texto por `<img>` com os logos reais. Aplicar `h-8 grayscale hover:grayscale-0 transition` para estilo premium.
-
-4. **Atualizar logo JJ&Amorim** no Header e Footer: substituir o placeholder "JJ" pelo logo real importado.
-
-5. **Atualizar counter** de "8 seguradoras" para "7 seguradoras".
-
-### Arquivos
-- Copiar 8 assets para `src/assets/`
-- Editar `src/pages/Index.tsx` (INSURERS, TrustBar, Header, Footer, counter)
+### Arquivos a modificar
+- `src/pages/Index.tsx` — logos, header flutuante, formulário Supabase, textos/SEO
+- `src/pages/Success.tsx` — botões funcionais
+- `index.html` — revisão meta tags SEO
 
