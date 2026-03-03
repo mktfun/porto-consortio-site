@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { CheckCircle, Search, Phone, Shield, ArrowRight, Star, ExternalLink, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Footer } from "@/components/Footer";
+
 
 const steps = [
     {
