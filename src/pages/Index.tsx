@@ -5,8 +5,11 @@ import {
   Truck, Package, Leaf, HardHat, Cpu, FlaskConical, Shirt, Boxes,
   AlertTriangle, FileText, Search, Send,
   Building2, Factory, ShoppingCart, Warehouse,
-  Ban, TrendingDown, FileWarning, Scale,
+  Ban, TrendingDown, FileWarning, Scale, Loader2
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 // Logos
 import jjamorimLogo from "@/assets/jjamorim-logo.png";
@@ -103,7 +106,7 @@ function Header() {
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled
         ? "bg-background/80 backdrop-blur-xl shadow-[0_1px_0_0_hsl(var(--border))]"
         : "bg-transparent"
-      }`}
+        }`}
     >
       <div className="mx-auto max-w-6xl px-5 flex h-16 items-center justify-between">
         <a href="#" className="flex items-center gap-2.5 group">
@@ -249,19 +252,19 @@ function TrustBar() {
           <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.15em] text-center mb-6">
             Parceria com as melhores seguradoras do país
           </p>
-            <div className="overflow-hidden">
-              <div className="marquee-track">
-                {[...INSURERS, ...INSURERS].map((ins, i) => (
-                  <div key={i} className="flex-shrink-0 flex items-center select-none px-4">
-                    <img
-                      src={ins.logo}
-                      alt={ins.name}
-                      className="h-8 md:h-10 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
-                    />
-                  </div>
-                ))}
-              </div>
+          <div className="overflow-hidden">
+            <div className="marquee-track">
+              {[...INSURERS, ...INSURERS].map((ins, i) => (
+                <div key={i} className="flex-shrink-0 flex items-center select-none px-4">
+                  <img
+                    src={ins.logo}
+                    alt={ins.name}
+                    className="h-8 md:h-10 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+                  />
+                </div>
+              ))}
             </div>
+          </div>
         </div>
       </section>
     </Reveal>
@@ -715,14 +718,51 @@ function FormSection() {
   const [form, setForm] = useState({
     nome: "", email: "", whats: "", tipo: "", origem: "", destino: "", valor: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm(prev => ({ ...prev, [field]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const msg = `Olá! Gostaria de uma cotação:%0A%0ANome: ${form.nome}%0AEmail: ${form.email}%0AWpp: ${form.whats}%0ACarga: ${form.tipo}%0AOrigem: ${form.origem}%0ADestino: ${form.destino}%0AValor: ${form.valor}`;
-    window.open(`https://wa.me/5511979699832?text=${msg}`, "_blank");
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.from('leads').upsert(
+        {
+          email: form.email,
+          name: form.nome,
+          phone: form.whats,
+          insurance_type: 'Transporte',
+          last_step_index: 3,
+          is_completed: true,
+          rd_station_synced: false,
+          custom_fields: {
+            cargo_type: form.tipo,
+            origin: form.origem,
+            destination: form.destino,
+            estimated_value: form.valor
+          }
+        },
+        { onConflict: 'email', ignoreDuplicates: false }
+      );
+
+      if (error) throw error;
+
+      // Navigate exactly like jjseguros logic
+      navigate('/sucesso');
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "Erro ao enviar",
+        description: "Ocorreu um problema ao enviar seus dados. Tente novamente.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputCls = "w-full px-4 py-3 rounded-xl border border-[#e2e8f0] bg-white text-sm placeholder:text-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-[#3E4095]/20 focus:border-[#3E4095]/40 transition-all";
@@ -783,8 +823,16 @@ function FormSection() {
                 <label className="block text-[13px] font-medium text-[#475569] mb-1.5">Valor estimado da carga</label>
                 <input type="text" value={form.valor} onChange={update("valor")} placeholder="R$ 0,00" className={inputCls} />
               </div>
-              <button type="submit" className="btn-primary w-full py-3.5 rounded-xl text-[15px] font-semibold flex items-center justify-center gap-2 mt-2">
-                Solicitar Cotação <ArrowRight className="w-4 h-4" />
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn-primary w-full py-3.5 rounded-xl text-[15px] font-semibold flex items-center justify-center gap-2 mt-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <>Verificando disponibilidade... <Loader2 className="w-4 h-4 animate-spin" /></>
+                ) : (
+                  <>Solicitar Cotação <ArrowRight className="w-4 h-4" /></>
+                )}
               </button>
               <p className="text-xs text-center text-[#94a3b8] pt-1">Sem compromisso · Seus dados estão protegidos</p>
             </form>
