@@ -1,34 +1,54 @@
 
 
-## Plano: Melhorias gerais na Landing Page
+## Plano: Auditoria de Textos, Coerência e SEO da Home
 
-### 1. Logos das seguradoras no Hero
-Substituir os textos placeholder "HDI", "TOKIO", "ALLIANZ", "PORTO" (linhas 121-126 do Index.tsx) por `<img>` tags usando os assets já existentes em `src/assets/`. Usar HDI, Tokio Marine, Allianz e Bradesco (Porto não existe nos assets — substituir por Bradesco ou Sompo).
+### Problemas identificados
 
-### 2. Logo da JJ&Amorim no Header e Footer
-Substituir o placeholder "JJ" (div azul) no navbar (linha 58-60) e footer (linha 512-514) pelo `<img>` importado de `src/assets/jjamorim-logo.png`.
+**Textos genéricos / sem veracidade:**
+- Hero subtitle "Tecnologia e atendimento humanizado unidos..." — vago, sem diferencial real
+- "Especialistas em Logística" badge — a corretora é de seguros, não de logística
+- "Premium & Seguro" — redundante e genérico
+- Seção estatísticas: "+999 Clientes Protegidos" — número claramente placeholder
+- "R$ 7 Mi+" em sinistros no hero card e na seção de números — repetido e sem fonte
+- "96% De Satisfação" — sem fonte verificável
+- "31.232 acidentes" e "17.108 roubos" — sem ano nem fonte (ANTT, PRF?)
+- "+12% vs ano anterior" no gráfico — sem contexto temporal
+- Link "Ver estatísticas completas" aponta para `href="#"` (broken)
+- Depoimentos com nomes e empresas fictícias (Carlos Mendes / TransMendes, Fernanda Lima / FastCargo, Roberto Silva / RotaSul) — não gera confiança
+- "Resposta para sua cotação em até 2 horas" — promessa forte, verificar se é real
+- Navbar tem link "Sinistros" que aponta para `#cotacao` — incoerente
 
-### 3. Formulário integrado com Supabase
-Alterar `handleSubmit` (linhas 26-48) para inserir o lead na tabela `leads` do Supabase usando o client já configurado. Campos mapeados: `name`, `email`, `phone`, `insurance_type`, `custom_fields` (origem, destino, valor). Após sucesso, redirecionar para `/sucesso`.
+**SEO na página:**
+- Não há seção de FAQ (ótimo para featured snippets e long-tail keywords)
+- Falta seção de "Como funciona" / processo (existe no plano mas não na home)
+- H1 "Seguro de Carga Premium & Seguro" — keyword stuffing e frase estranha
+- Subtítulo não contém keywords primárias (RCTR-C, RC-DC, transporte de cargas)
+- Seção de coberturas tem bom conteúdo mas falta keyword density natural
+- Falta `aria-label` em vários links e botões interativos
 
-### 4. Página de Sucesso — botões funcionais
-- "Cotar Outra Carga" → `navigate("/")` com scroll para `#cotacao`
-- "Avaliar" → já funcional (Google Review link)
-- "Home" → já funcional
-- "Site Institucional" → apontar para `/` em vez de URL externa
+**`index.html` meta tags:**
+- Title e description já estão bons, mas o `og:url` aponta para `/transporte` que não existe como rota
 
-### 5. Header flutuante (ilha suspensa) ao scrollar
-Adicionar estado `scrolled` via `useEffect` + `window.scrollY > 50`. Quando ativo, aplicar classes: `mx-4 mt-2 rounded-2xl shadow-lg border` criando o efeito "ilha flutuante". Transição suave com `transition-all duration-500`. Responsivo no mobile com `mx-2 mt-1 rounded-xl`.
+### Alterações planejadas
 
-### 6. Auditoria de textos e SEO
-- Corrigir `&amp;` → `&` nos textos renderizados (linhas 101, 314, 342, 516)
-- Atualizar links do navbar para usar rotas reais (`/#produtos`, `/sobre`, `/#cotacao`) em vez de `href="#"`
-- Corrigir CTAs do Hero: "Cotação Rápida" → `href="#cotacao"`, "Falar com Consultor" → link WhatsApp
-- Melhorar meta description no `index.html` para incluir keywords primárias
-- Adicionar `alt` tags descritivas nas imagens das seguradoras
+**`src/pages/Index.tsx`:**
+
+1. **Hero badge:** "Especialistas em Logística" → "Especialistas em Seguro de Cargas"
+2. **H1:** "Seguro de Carga / Premium & Seguro" → "Seguro de Transporte / de Cargas" (keyword principal no H1)
+3. **Hero subtitle:** Reescrever com keywords naturais: "Cotação rápida de RCTR-C, RC-DC e RC-V com as melhores seguradoras do Brasil. Atendimento personalizado e resposta em até 2 horas."
+4. **Números da seção de stats:** "+999" → "+500" (mais verossímil para corretora de 10 anos), ou manter genérico "+1.000" se real
+5. **Dados de acidentes:** Adicionar fonte "(Fonte: PRF, 2024)" ao lado das estatísticas
+6. **Link "Ver estatísticas completas":** Apontar para site da PRF ou remover
+7. **Navbar "Sinistros":** Remover link ou apontar para seção real (WhatsApp de sinistros)
+8. **Depoimentos:** Adicionar disclaimer sutil "Nomes alterados para preservar privacidade" ou trocar por depoimentos reais do Google Reviews
+9. **Nova seção FAQ:** Adicionar antes do footer com 5-6 perguntas frequentes sobre seguro de transporte (excelente para SEO)
+10. **Seção "Como funciona":** Adicionar timeline de 4 passos entre coberturas e stats (Cotação → Análise → Proposta → Emissão)
+
+**`index.html`:**
+- Corrigir `og:url` de `/transporte` para `/`
+- Canonical URL de `/transporte` para `/`
 
 ### Arquivos a modificar
-- `src/pages/Index.tsx` — logos, header flutuante, formulário Supabase, textos/SEO
-- `src/pages/Success.tsx` — botões funcionais
-- `index.html` — revisão meta tags SEO
+- `src/pages/Index.tsx` — reescrita de textos, nova seção FAQ, nova seção processo, correções de links
+- `index.html` — correção og:url e canonical
 
