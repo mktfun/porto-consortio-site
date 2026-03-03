@@ -1,13 +1,22 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 import {
-    Sun, Moon, ArrowRight, Phone, ShieldCheck, AlertTriangle, Truck, Package, Ship, Star, StarHalf, Lock, Facebook, Instagram, Briefcase, Mail, MapPin, CheckCircle2, Loader2, MessageCircle
+    Sun, Moon, ArrowRight, Phone, ShieldCheck, AlertTriangle, Truck, Package, Ship, Star, StarHalf, Lock, Facebook, Instagram, Briefcase, Mail, MapPin, CheckCircle2, Loader2, MessageCircle, Menu, X
 } from "lucide-react";
+
+import jjamorimLogo from "@/assets/jjamorim-logo.png";
+import hdiLogo from "@/assets/hdi-seguros.png";
+import tokioLogo from "@/assets/tokio-marine.png";
+import allianzLogo from "@/assets/allianz.png";
+import bradescoLogo from "@/assets/bradesco-seguros.svg";
 
 export default function Index() {
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [form, setForm] = useState({
         nome: "", email: "", whats: "", tipo: "", origem: "", destino: "", valor: "",
     });
@@ -20,6 +29,12 @@ export default function Index() {
         else document.documentElement.classList.remove('dark');
     }, [isDarkMode]);
 
+    useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 50);
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
         setForm(prev => ({ ...prev, [field]: e.target.value }));
 
@@ -27,14 +42,26 @@ export default function Index() {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            // TODO: Integrar com Supabase no futuro
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            console.log("Form data submitted:", form);
-            toast({
-                title: "Sucesso!",
-                description: "Formulário enviado com sucesso.",
+            const { error } = await supabase.from("leads").insert({
+                name: form.nome,
+                email: form.email,
+                phone: form.whats,
+                insurance_type: form.tipo || "Transporte de Cargas",
+                custom_fields: {
+                    origem: form.origem,
+                    destino: form.destino,
+                    valor_medio: form.valor,
+                    tipo_carga: form.tipo,
+                    fonte: "landing-page-transporte",
+                },
+                funnel_name: "transporte-cargas",
+                funnel_stage: "lead",
+                is_completed: true,
             });
-            // navigate('/sucesso');
+
+            if (error) throw error;
+
+            navigate("/sucesso");
         } catch (err) {
             console.error(err);
             toast({
@@ -51,34 +78,50 @@ export default function Index() {
         <div className="bg-[#f8fafc] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors duration-300 min-h-screen">
 
             <nav
-                className="fixed w-full z-50 top-0 transition-all duration-300 backdrop-blur-md bg-white/70 dark:bg-[#0f172a]/70 border-b border-slate-200/50 dark:border-slate-700/50">
+                className={`fixed w-full z-50 top-0 transition-all duration-500 ease-in-out backdrop-blur-md ${
+                    scrolled
+                        ? "mx-auto mt-2 md:mt-3 px-2 md:px-4 max-w-[calc(100%-1rem)] md:max-w-[calc(100%-2rem)] left-[0.5rem] md:left-[1rem] right-[0.5rem] md:right-[1rem] rounded-xl md:rounded-2xl bg-white/90 dark:bg-[#0f172a]/90 shadow-lg shadow-slate-900/5 border border-slate-200/60 dark:border-slate-700/60"
+                        : "bg-white/70 dark:bg-[#0f172a]/70 border-b border-slate-200/50 dark:border-slate-700/50"
+                }`}
+                style={scrolled ? { width: 'auto' } : undefined}
+            >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-20">
-                        <div className="flex items-center space-x-3">
-                            <div
-                                className="w-10 h-10 bg-gradient-to-br from-[#3b5bdb] to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                                JJ</div>
-                            <span className="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white">JJ <span
-                                className="text-[#3b5bdb]">&</span> Amorim</span>
-                        </div>
+                    <div className="flex justify-between items-center h-16 md:h-20">
+                        <Link to="/" className="flex items-center space-x-3">
+                            <img src={jjamorimLogo} alt="JJ & Amorim Corretora de Seguros" className="h-9 md:h-10 w-auto" />
+                        </Link>
                         <div className="hidden md:flex space-x-8 text-sm font-medium">
                             <a className="text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb] dark:hover:text-[#3b5bdb] transition-colors"
-                                href="#">Produtos</a>
+                                href="/#cotacao">Produtos</a>
+                            <Link className="text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb] dark:hover:text-[#3b5bdb] transition-colors"
+                                to="/sobre">Sobre Nós</Link>
                             <a className="text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb] dark:hover:text-[#3b5bdb] transition-colors"
-                                href="#">Sobre Nós</a>
+                                href="/#cotacao">Sinistros</a>
                             <a className="text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb] dark:hover:text-[#3b5bdb] transition-colors"
-                                href="#">Sinistros</a>
-                            <a className="text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb] dark:hover:text-[#3b5bdb] transition-colors"
-                                href="#">Contato</a>
+                                href="/#cotacao">Contato</a>
                         </div>
-                        <div className="flex items-center space-x-4">
-                            <button onClick={() => setIsDarkMode(!isDarkMode)} aria-label="Toggle Dark Mode" className="bg-slate-100 dark:bg-slate-800 p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">{isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}</button>
+                        <div className="flex items-center space-x-3">
+                            <button onClick={() => setIsDarkMode(!isDarkMode)} aria-label="Alternar modo escuro" className="bg-slate-100 dark:bg-slate-800 p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                            </button>
                             <a className="hidden md:inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-full text-white bg-[#3b5bdb] hover:bg-blue-700 shadow-[0_0_20px_-5px_rgba(59,91,219,0.5)] transition-all duration-300 hover:-translate-y-0.5"
                                 href="#cotacao">
-                                Área do Cliente
+                                Solicitar Cotação
                             </a>
+                            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Menu">
+                                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                            </button>
                         </div>
                     </div>
+                    {/* Mobile menu */}
+                    {mobileMenuOpen && (
+                        <div className="md:hidden pb-4 space-y-2 border-t border-slate-200/50 dark:border-slate-700/50 pt-4">
+                            <a onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb]" href="#cotacao">Produtos</a>
+                            <Link onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb]" to="/sobre">Sobre Nós</Link>
+                            <a onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb]" href="#cotacao">Contato</a>
+                            <a onClick={() => setMobileMenuOpen(false)} className="block w-full text-center py-2.5 bg-[#3b5bdb] text-white rounded-lg font-medium text-sm" href="#cotacao">Solicitar Cotação</a>
+                        </div>
+                    )}
                 </div>
             </nav>
             <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
@@ -98,7 +141,7 @@ export default function Index() {
                                 className="text-4xl lg:text-6xl font-display font-extrabold tracking-tight text-slate-900 dark:text-white mb-6 leading-tight">
                                 Seguro de Carga <br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3b5bdb] to-blue-400">Premium
-                                    &amp; Seguro</span>
+                                    & Seguro</span>
                             </h1>
                             <p
                                 className="mt-4 text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
@@ -107,29 +150,29 @@ export default function Index() {
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                                 <a className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-full text-white bg-[#3b5bdb] hover:bg-blue-700 shadow-lg hover:shadow-[#3b5bdb]/30 transition-all duration-300"
-                                    href="#">
+                                    href="#cotacao">
                                     Cotação Rápida
-                                    <ArrowRight className="w-5 h-5" />
+                                    <ArrowRight className="w-5 h-5 ml-2" />
                                 </a>
                                 <a className="inline-flex items-center justify-center px-8 py-4 border border-slate-200 dark:border-slate-700 text-base font-medium rounded-full text-slate-700 dark:text-white bg-white dark:bg-[#1e293b] hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-300"
-                                    href="#">
-                                    <Phone className="w-5 h-5" />
+                                    href="https://wa.me/5511979699832?text=Ol%C3%A1%2C%20gostaria%20de%20uma%20cota%C3%A7%C3%A3o%20de%20seguro%20de%20transporte%20de%20cargas." target="_blank" rel="noopener noreferrer">
+                                    <Phone className="w-5 h-5 mr-2" />
                                     Falar com Consultor
                                 </a>
                             </div>
                             <div
-                                className="mt-10 flex items-center justify-center lg:justify-start gap-x-6 grayscale opacity-60 dark:invert">
-                                <div className="font-bold text-xl text-slate-400">HDI</div>
-                                <div className="font-bold text-xl text-slate-400">TOKIO</div>
-                                <div className="font-bold text-xl text-slate-400">ALLIANZ</div>
-                                <div className="font-bold text-xl text-slate-400">PORTO</div>
+                                className="mt-10 flex items-center justify-center lg:justify-start gap-x-6 opacity-60">
+                                <img src={hdiLogo} alt="HDI Seguros" className="h-7 md:h-8 w-auto object-contain grayscale dark:invert" />
+                                <img src={tokioLogo} alt="Tokio Marine Seguros" className="h-7 md:h-8 w-auto object-contain grayscale dark:invert" />
+                                <img src={allianzLogo} alt="Allianz Seguros" className="h-7 md:h-8 w-auto object-contain grayscale dark:invert" />
+                                <img src={bradescoLogo} alt="Bradesco Seguros" className="h-7 md:h-8 w-auto object-contain grayscale dark:invert" />
                             </div>
                         </div>
                         <div className="lg:col-span-6 relative">
                             <div
                                 className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-700">
                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent z-10"></div>
-                                <img alt="Large container ship navigating calm waters at sunset"
+                                <img alt="Navio de contêineres navegando em águas calmas ao pôr do sol representando seguro de transporte de cargas"
                                     className="w-full h-[500px] object-cover transform hover:scale-105 transition-transform duration-700"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNC4xmIzrvgU5QU4laJX38qvoJgwkcpW28o2jpmrPdD4oN2l7P46CKwwtfofze-1Sb-6-jfMPTVcyuBElu2Ro6kpz3QxkBZLyc3dDGmJkaQpCJoVnC6i-dCluY3caWurqzJ_1dyWUlreOYMVU3cjLmpdw3jSCZPy6TCvsoBTL47tzLgEB9ktN7aFiNob3-tNmp1esi_cHxm5aXmISnjC3GjAIcGMf0K-8rxeo1zeMWLX6RYnFjKkqu19IfRgcClhVcq3Hskw8udm4" />
                                 <div
@@ -311,7 +354,7 @@ export default function Index() {
                 </div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-white mb-2">A JJ &amp; Amorim em números</h2>
+                        <h2 className="text-3xl font-bold text-white mb-2">A JJ & Amorim em números</h2>
                         <p className="text-blue-100">Mais de uma década de experiência protegendo famílias e empresas.</p>
                     </div>
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
@@ -339,7 +382,7 @@ export default function Index() {
                     <div className="flex justify-between items-center mb-12">
                         <div>
                             <h2 className="text-3xl font-bold text-slate-900 dark:text-white">O que nossos parceiros dizem</h2>
-                            <p className="mt-2 text-slate-600 dark:text-slate-400">Feedback real de quem confia na JJ&amp;Amorim</p>
+                            <p className="mt-2 text-slate-600 dark:text-slate-400">Feedback real de quem confia na JJ & Amorim</p>
                         </div>
                         <div className="hidden md:flex space-x-2">
                             <button
@@ -436,9 +479,9 @@ export default function Index() {
                                 Faça uma cotação gratuita hoje e descubra como podemos proteger o seu negócio.
                             </p>
                             <ul className="space-y-4 text-slate-300 text-left">
-                                <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-[#f59e0b] mr-3" /> Condições negociadas com as melhores seguradoras</li>
-                                <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-[#f59e0b] mr-3" /> Especialistas em logística rodoviária</li>
-                                <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-[#f59e0b] mr-3" /> Resposta para sua cotação em até 2 horas</li>
+                                <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-[#f59e0b] mr-3 flex-shrink-0" /> Condições negociadas com as melhores seguradoras</li>
+                                <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-[#f59e0b] mr-3 flex-shrink-0" /> Especialistas em logística rodoviária</li>
+                                <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-[#f59e0b] mr-3 flex-shrink-0" /> Resposta para sua cotação em até 2 horas</li>
                             </ul>
                         </div>
 
@@ -491,11 +534,12 @@ export default function Index() {
                                 </div>
 
                                 <button disabled={isSubmitting} type="submit" className="w-full flex items-center justify-center px-4 py-3 bg-[#3b5bdb] hover:bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:shadow-[#3b5bdb]/30 transition-all duration-300 disabled:opacity-70">
-                                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : "Solicitar Cotação"}
+                                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
+                                    {isSubmitting ? "Enviando..." : "Solicitar Cotação"}
                                 </button>
 
                                 <p className="text-xs text-center text-slate-500 mt-4 flex items-center justify-center">
-                                    <Lock className="w-3 h-3 mr-1" /> Seus dados estão seguros
+                                    <Lock className="w-3 h-3 mr-1" /> Seus dados estão seguros e protegidos
                                 </p>
                             </form>
                         </div>
@@ -509,11 +553,7 @@ export default function Index() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
                         <div className="col-span-1 lg:col-span-1">
                             <div className="flex items-center space-x-2 mb-6">
-                                <div
-                                    className="w-8 h-8 bg-[#3b5bdb] rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                                    JJ</div>
-                                <span className="font-display font-bold text-lg text-slate-900 dark:text-white">JJ <span
-                                    className="text-[#3b5bdb]">&amp;</span> Amorim</span>
+                                <img src={jjamorimLogo} alt="JJ & Amorim Corretora de Seguros" className="h-8 w-auto" />
                             </div>
                             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
                                 Corretora de seguros especializada em transporte de cargas. Protegendo o que importa há mais de
@@ -548,20 +588,20 @@ export default function Index() {
                             <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4">Contato
                             </h3>
                             <ul className="space-y-3">
-                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm">
-                                    <Phone className="w-5 h-5" />
+                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm gap-2">
+                                    <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
                                     (11) 3493-3605
                                 </li>
-                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm">
-                                    <MessageCircle className="w-5 h-5" />
-                                    (11) 97969-9832
+                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm gap-2">
+                                    <MessageCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                                    <a href="https://wa.me/5511979699832" target="_blank" rel="noopener noreferrer" className="hover:text-[#3b5bdb] transition-colors">(11) 97969-9832</a>
                                 </li>
-                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm">
-                                    <Mail className="w-5 h-5" />
+                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm gap-2">
+                                    <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
                                     contato@jjamorimseguros.com.br
                                 </li>
-                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm">
-                                    <MapPin className="w-5 h-5" />
+                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm gap-2">
+                                    <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
                                     R. Frei Gaspar, 941 - Sala 603<br />São Bernardo do Campo - SP
                                 </li>
                             </ul>
