@@ -1,60 +1,43 @@
 
 
-## Analise Completa e Plano de Melhorias
+## Plano: Logos reais das seguradoras de transporte na Trust Bar
 
-### Problemas Identificados
+### O que muda
+O usuario enviou logos reais de 7 seguradoras que atuam em seguro de transporte de cargas. A lista atual inclui "Liberty Seguros" e "SulAmerica" que precisam ser ajustadas (Liberty virou Yelum, SulAmerica nao faz transporte).
 
-#### SEO
-1. **Falta og:image e twitter:image** — sem imagem para compartilhamento social (critical para CTR)
-2. **Sem JSON-LD (Schema.org)** — nao tem structured data para LocalBusiness/InsuranceAgency (Google Rich Results)
-3. **Sem og:url** — falta URL canonica no Open Graph
-4. **Sem favicon adequado** — apenas favicon.ico generico, sem apple-touch-icon ou manifest
-5. **Sem sitemap.xml** — robots.txt existe mas nao aponta sitemap
-6. **Meta keywords** — tag obsoleta, nao prejudica mas ocupa espaco. Pode manter
-7. **H1 unico e otimizado** — OK, ja tem
-8. **Alt text em imagens** — nao ha imagens, entao nao ha alts (problema sera resolvido adicionando imagens)
-9. **Sem hreflang** — nao critico pois e single-language
+### Seguradoras corretas (seguro transporte)
+Com base nos logos enviados:
+1. **Bradesco Seguros** — `user-uploads://1580839736wpdm_bradesco-seguros-logo.svg`
+2. **HDI Seguros** — `user-uploads://image-2.png`
+3. **Allianz** — `user-uploads://image-3.png`
+4. **Azul Seguros** — `user-uploads://image-4.png`
+5. **Sompo** — `user-uploads://image-5.png`
+6. **Yelum** (ex-Liberty) — `user-uploads://image-6.png`
+7. **Tokio Marine** — `user-uploads://image-7.png`
 
-#### Imagens/Logos Faltando
-1. **Logo JJ&Amorim** — header e footer usam icone Shield generico + texto, sem logo real
-2. **Logos das seguradoras** na Trust Bar — sao apenas texto cinza, sem logos reais (Bradesco, HDI, SulAmerica, etc)
-3. **Hero sem imagem visual** — apenas texto e gradiente sutil, falta imagem de caminhao/transporte
-4. **Tipos de Carga** — apenas icones Lucide, sem imagens reais de caminhoes/cargas
-5. **Secao "Quem Atendemos"** — sem imagens contextuais
-6. **og:image / twitter:image** — sem imagem de preview social
+A primeira imagem (`user-uploads://image.png`) e o logo da JJ&Amorim.
 
-### Plano de Implementacao
+### Implementacao
 
-#### 1. SEO — `index.html` + `public/`
-- Adicionar **JSON-LD** com schema InsuranceAgency (nome, endereco, telefone, CNPJ, area de atuacao)
-- Adicionar **og:image** e **twitter:image** apontando para imagem OG gerada
-- Adicionar **og:url**
-- Criar **sitemap.xml** basico em `public/`
-- Atualizar **robots.txt** com referencia ao sitemap
-- Adicionar **apple-touch-icon** meta tag e **theme-color**
+1. **Copiar todos os 8 assets** para `src/assets/`:
+   - `jjamorim-logo.png` (logo JJ)
+   - `bradesco-seguros.svg`
+   - `hdi-seguros.png`
+   - `allianz.png`
+   - `azul-seguros.png`
+   - `sompo.png`
+   - `yelum.png`
+   - `tokio-marine.png`
 
-#### 2. Imagens com Unsplash — `src/pages/Index.tsx`
-Usar imagens de alta qualidade do Unsplash (URLs diretas, gratuitas, sem necessidade de download):
+2. **Atualizar `INSURERS` array** em `Index.tsx`: remover SulAmerica e Liberty, adicionar Yelum. Lista final de 7 seguradoras com import de imagem.
 
-- **Hero**: imagem de caminhao em rodovia ao lado do texto (split layout no desktop)
-  - `https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800` (caminhao em estrada)
-- **Tipos de Carga**: manter icones mas adicionar uma imagem de fundo sutil ou imagem hero da secao
-- **Trust Bar logos**: substituir texto por **SVGs inline simples** estilizados como logos das seguradoras (nao temos logos reais, mas podemos criar representacoes tipograficas mais fortes com font-weight e estilizacao)
+3. **Atualizar Trust Bar**: substituir icone Shield + texto por `<img>` com os logos reais. Aplicar `h-8 grayscale hover:grayscale-0 transition` para estilo premium.
 
-#### 3. Logo JJ&Amorim — Header e Footer
-- Como nao temos o logo real, melhorar o placeholder: usar as iniciais "JJ" estilizadas em um badge mais elaborado, ou pedir ao usuario para fazer upload do logo
-- Adicionar nota no codigo para facilitar substituicao futura
+4. **Atualizar logo JJ&Amorim** no Header e Footer: substituir o placeholder "JJ" pelo logo real importado.
 
-#### 4. Imagens contextuais adicionais
-- **Secao Urgencia**: pequena imagem de acidente/carga tombada ao lado do grafico
-- **CTA Final**: background com imagem escura de rodovia com overlay
+5. **Atualizar counter** de "8 seguradoras" para "7 seguradoras".
 
-### Arquivos a Modificar
-- `index.html` — JSON-LD, og:image, meta tags adicionais
-- `public/sitemap.xml` — novo arquivo
-- `public/robots.txt` — adicionar sitemap reference
-- `src/pages/Index.tsx` — Hero com imagem, Trust Bar melhorada, imagens contextuais, logo placeholder melhorado
-
-### Pergunta ao Usuario
-Antes de implementar, preciso saber sobre o logo — o usuario tem o arquivo do logo da JJ&Amorim para upload?
+### Arquivos
+- Copiar 8 assets para `src/assets/`
+- Editar `src/pages/Index.tsx` (INSURERS, TrustBar, Header, Footer, counter)
 
