@@ -1,992 +1,600 @@
-import { useState, useEffect, useRef, type ReactNode } from "react";
-import {
-  Shield, Phone, ArrowRight, CheckCircle2, MessageCircle, Menu, X,
-  Clock, Zap, Users, Award, ChevronRight,
-  Truck, Package, Leaf, HardHat, Cpu, FlaskConical, Shirt, Boxes,
-  AlertTriangle, FileText, Search, Send,
-  Building2, Factory, ShoppingCart, Warehouse,
-  Ban, TrendingDown, FileWarning, Scale, Loader2
-} from "lucide-react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-// Logos
-import jjamorimLogo from "@/assets/jjamorim-logo.png";
-import bradescoLogo from "@/assets/bradesco-seguros.svg";
-import hdiLogo from "@/assets/hdi-seguros.png";
-import allianzLogo from "@/assets/allianz.png";
-import azulLogo from "@/assets/azul-seguros.png";
-import sompoLogo from "@/assets/sompo.png";
-import yelumLogo from "@/assets/yelum.png";
-import tokioMarineLogo from "@/assets/tokio-marine.png";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
-} from "recharts";
+    Sun, Moon, ArrowRight, Phone, ShieldCheck, AlertTriangle, Truck, Package, Ship, Star, StarHalf, Lock, Facebook, Camera, Briefcase, Mail, MapPin, CheckCircle2, Loader2, MessageCircle
+} from "lucide-react";
 
-/* ═══════════════════════════════════════════
-   CONFIG
-   ═══════════════════════════════════════════ */
-const WA = "https://wa.me/5511979699832?text=Olá!%20Gostaria%20de%20uma%20cotação%20de%20seguro%20de%20transporte%20de%20cargas.";
-const TEL = "(11) 97969-9832";
-
-/* ═══════════════════════════════════════════
-   REVEAL — Intersection Observer hook
-   ═══════════════════════════════════════════ */
-function useReveal() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { el.classList.add("visible"); obs.unobserve(el); } },
-      { threshold: 0.12 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return ref;
-}
-function Reveal({ children, className = "" }: { children: ReactNode; className?: string }) {
-  const ref = useReveal();
-  return <div ref={ref} className={`reveal ${className}`}>{children}</div>;
-}
-
-/* ═══════════════════════════════════════════
-   COUNTER — animated number
-   ═══════════════════════════════════════════ */
-function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
-  const [val, setVal] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const done = useRef(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !done.current) {
-        done.current = true;
-        let s = 0;
-        const dur = 1800;
-        const step = (t: number) => {
-          if (!s) s = t;
-          const p = Math.min((t - s) / dur, 1);
-          setVal(Math.floor(p * to));
-          if (p < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      }
-    }, { threshold: 0.5 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [to]);
-  return <span ref={ref}>{val.toLocaleString("pt-BR")}{suffix}</span>;
-}
-
-/* ═══════════════════════════════════════════
-   1. HEADER
-   ═══════════════════════════════════════════ */
-function Header() {
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  const links = [
-    { href: "#coberturas", label: "Coberturas" },
-    { href: "#como-funciona", label: "Como Funciona" },
-    { href: "#diferenciais", label: "Diferenciais" },
-  ];
-
-  return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled
-        ? "bg-background/80 backdrop-blur-xl shadow-[0_1px_0_0_hsl(var(--border))]"
-        : "bg-transparent"
-        }`}
-    >
-      <div className="mx-auto max-w-6xl px-5 flex h-16 items-center justify-between">
-        <a href="#" className="flex items-center gap-2.5 group">
-          <img src={jjamorimLogo} alt="JJ & Amorim Corretora de Seguros" className="h-10 w-auto object-contain transition-transform group-hover:scale-105" />
-        </a>
-
-        <nav className="hidden md:flex items-center gap-8">
-          {links.map(l => (
-            <a key={l.href} href={l.href} className="text-[13px] font-medium text-[#64748b] hover:text-[#1e293b] transition-colors">{l.label}</a>
-          ))}
-          <a href={`tel:${TEL.replace(/\D/g, "")}`} className="text-[13px] font-medium text-[#64748b] hover:text-[#1e293b] transition-colors flex items-center gap-1.5">
-            <Phone className="w-3.5 h-3.5" /> {TEL}
-          </a>
-          <a href="#form" className="btn-primary px-4 py-2 rounded-lg text-[13px] font-semibold inline-flex items-center gap-1.5">
-            Solicitar Cotação <ArrowRight className="w-3.5 h-3.5" />
-          </a>
-        </nav>
-
-        <button className="md:hidden p-2 -mr-2" onClick={() => setOpen(!open)} aria-label="Menu">
-          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
-      </div>
-
-      {open && (
-        <div className="md:hidden bg-white border-t px-5 py-5 space-y-4 animate-fade-in">
-          {links.map(l => (
-            <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="block text-sm font-medium text-[#64748b]">{l.label}</a>
-          ))}
-          <a href={`tel:${TEL.replace(/\D/g, "")}`} className="block text-sm font-medium text-[#64748b]">{TEL}</a>
-          <a href="#form" onClick={() => setOpen(false)} className="btn-primary block text-center py-2.5 rounded-lg text-sm font-semibold">Solicitar Cotação</a>
-        </div>
-      )}
-    </header>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   2. HERO — Stripe-clean + badge +10 anos + checklist
-   ═══════════════════════════════════════════ */
-function Hero() {
-  const checks = [
-    "Cotação em até 24h",
-    "7 seguradoras parceiras",
-    "Atendimento especializado",
-  ];
-
-  return (
-    <section className="relative pt-28 pb-16 md:pt-40 md:pb-28 overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-gradient-to-b from-primary/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
-
-      <div className="mx-auto max-w-6xl px-5 relative">
-        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-          {/* Text */}
-          <div>
-            {/* Badges */}
-            <div className="flex flex-wrap gap-2.5 mb-8">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/15 text-primary text-[11px] font-semibold tracking-wide uppercase animate-fade-up" style={{ animationDelay: "0ms" }}>
-                <Shield className="w-3 h-3" /> Lei 14.599/2023 — Obrigatório
-              </div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-accent/20 text-accent text-[11px] font-semibold tracking-wide uppercase animate-fade-up bg-accent/[0.04]" style={{ animationDelay: "60ms" }}>
-                <Award className="w-3 h-3" /> +10 anos de mercado
-              </div>
-            </div>
-
-            <h1 className="text-[clamp(2rem,5vw,3.5rem)] font-black leading-[1.05] tracking-tight text-foreground mb-6 animate-fade-up" style={{ animationDelay: "80ms" }}>
-              Seguro de transporte{" "}
-              <br className="hidden sm:block" />
-              <span className="gradient-text">de cargas.</span>
-            </h1>
-
-            <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl mb-8 animate-fade-up" style={{ animationDelay: "160ms" }}>
-              Cotação rápida e personalizada com as melhores seguradoras do país. Proteja seu patrimônio com quem entende do assunto.
-            </p>
-
-            {/* Checklist inline */}
-            <div className="flex flex-wrap gap-x-5 gap-y-2 mb-10 animate-fade-up" style={{ animationDelay: "200ms" }}>
-              {checks.map((c, i) => (
-                <span key={i} className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-accent" /> {c}
-                </span>
-              ))}
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 animate-fade-up" style={{ animationDelay: "240ms" }}>
-              <a href="#form" className="btn-primary px-6 py-3 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2">
-                Solicitar Cotação <ArrowRight className="w-4 h-4" />
-              </a>
-              <a href={WA} target="_blank" rel="noopener noreferrer" className="btn-outline px-6 py-3 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2">
-                <MessageCircle className="w-4 h-4" /> Falar no WhatsApp
-              </a>
-            </div>
-          </div>
-
-          {/* Hero Image */}
-          <div className="relative animate-fade-up hidden md:block" style={{ animationDelay: "300ms" }}>
-            <div className="rounded-2xl overflow-hidden shadow-2xl shadow-primary/10">
-              <img
-                src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&h=600&fit=crop&q=80"
-                alt="Caminhão de carga em rodovia brasileira — seguro de transporte de cargas"
-                className="w-full h-[400px] object-cover"
-                loading="eager"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 to-transparent rounded-2xl" />
-            </div>
-            {/* Floating stat */}
-            <div className="absolute -bottom-4 -left-4 bg-background rounded-xl border border-border p-4 shadow-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <p className="text-lg font-black text-foreground">1.000+</p>
-                  <p className="text-[11px] text-muted-foreground">Clientes protegidos</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   3. TRUST BAR — marquee animado
-   ═══════════════════════════════════════════ */
-const INSURERS = [
-  { name: "Bradesco Seguros", logo: bradescoLogo },
-  { name: "HDI Seguros", logo: hdiLogo },
-  { name: "Allianz", logo: allianzLogo },
-  { name: "Azul Seguros", logo: azulLogo },
-  { name: "Sompo Seguros", logo: sompoLogo },
-  { name: "Yelum Seguros", logo: yelumLogo },
-  { name: "Tokio Marine", logo: tokioMarineLogo },
-];
-
-function TrustBar() {
-  return (
-    <Reveal>
-      <section className="py-10 border-y border-border">
-        <div className="mx-auto max-w-6xl px-5">
-          <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.15em] text-center mb-6">
-            Parceria com as melhores seguradoras do país
-          </p>
-          <div className="overflow-hidden">
-            <div className="marquee-track">
-              {[...INSURERS, ...INSURERS].map((ins, i) => (
-                <div key={i} className="flex-shrink-0 flex items-center select-none px-4">
-                  <img
-                    src={ins.logo}
-                    alt={ins.name}
-                    className="h-8 md:h-10 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   4. DADOS/URGÊNCIA — gráficos animados (Recharts)
-   ═══════════════════════════════════════════ */
-const ACCIDENT_DATA = [
-  { year: "2018", acidentes: 67101, cor: "#3E4095" },
-  { year: "2019", acidentes: 63547, cor: "#3E4095" },
-  { year: "2020", acidentes: 52077, cor: "#3E4095" },
-  { year: "2021", acidentes: 56981, cor: "#3E4095" },
-  { year: "2022", acidentes: 63576, cor: "#3E4095" },
-  { year: "2023", acidentes: 68475, cor: "#e74c3c" },
-];
-
-function UrgencyData() {
-  const [animate, setAnimate] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { setAnimate(true); obs.unobserve(el); }
-    }, { threshold: 0.2 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  return (
-    <Reveal>
-      <section className="py-20 md:py-32 bg-muted/50" ref={ref}>
-        <div className="mx-auto max-w-6xl px-5">
-          <p className="text-[11px] font-semibold text-primary uppercase tracking-[0.15em] mb-4">Dados do setor</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4 max-w-2xl">
-            O transporte de cargas no Brasil é de alto risco.
-          </h2>
-          <p className="text-sm md:text-base text-muted-foreground max-w-xl mb-12">
-            Acidentes, roubos e avarias acontecem todos os dias nas rodovias brasileiras. Proteja sua operação com dados reais.
-          </p>
-
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            {/* Chart */}
-            <div className="bg-background rounded-2xl border border-border p-5 md:p-7">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-5">Acidentes com caminhões por ano (Brasil)</p>
-              <div className="h-64 md:h-72">
-                {animate && (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={ACCIDENT_DATA} barCategoryGap="20%">
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                      <XAxis dataKey="year" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`} />
-                      <Tooltip
-                        contentStyle={{ borderRadius: 12, border: "1px solid hsl(var(--border))", fontSize: 13 }}
-                        formatter={(value: number) => [value.toLocaleString("pt-BR"), "Acidentes"]}
-                      />
-                      <Bar dataKey="acidentes" radius={[6, 6, 0, 0]} animationDuration={1400}>
-                        {ACCIDENT_DATA.map((entry, i) => (
-                          <Cell key={i} fill={entry.cor} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                )}
-              </div>
-              <p className="text-[10px] text-muted-foreground/50 mt-3">Fonte: PRF / CNT — Dados consolidados</p>
-            </div>
-
-            {/* Counters + Image */}
-            <div className="space-y-8">
-              {/* Contextual image */}
-              <div className="rounded-xl overflow-hidden mb-6">
-                <img
-                  src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=250&fit=crop&q=80"
-                  alt="Operação logística de transporte de cargas — riscos nas rodovias"
-                  className="w-full h-[160px] object-cover rounded-xl"
-                  loading="lazy"
-                />
-              </div>
-              {[
-                { value: 68475, label: "Acidentes com caminhões em 2023", suffix: "" },
-                { value: 22400, label: "Roubos de carga registrados em 2023", suffix: "+" },
-                { value: 5200, label: "Mortes em acidentes rodoviários em 2023", suffix: "+" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/[0.06] flex items-center justify-center flex-shrink-0">
-                    <AlertTriangle className={`w-5 h-5 ${i === 2 ? "text-destructive" : "text-primary"}`} />
-                  </div>
-                  <div>
-                    <div className="text-3xl md:text-4xl font-black text-foreground">
-                      <Counter to={item.value} suffix={item.suffix} />
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-0.5">{item.label}</p>
-                  </div>
-                </div>
-              ))}
-              <a href="#form" className="inline-flex items-center gap-2 text-[13px] font-semibold text-primary mt-2 hover:gap-3 transition-all">
-                Proteja sua carga agora <ChevronRight className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   5. POR QUE CONTRATAR
-   ═══════════════════════════════════════════ */
-function WhyHire() {
-  const items = [
-    { icon: Shield, title: "Obrigação Legal", text: "A Lei 14.599/2023 tornou o seguro obrigatório para transportadores rodoviários de carga. Operar sem ele é infração grave, com multas e suspensão da atividade." },
-    { icon: CheckCircle2, title: "Proteção Financeira Total", text: "Reembolso integral de perdas e danos às mercadorias em caso de acidentes, roubos, avarias ou extravios durante todo o percurso." },
-    { icon: Award, title: "Credibilidade no Mercado", text: "Empresas seguradas transmitem segurança. Contratantes e embarcadores exigem comprovante de seguro para fechar novos contratos." },
-  ];
-
-  return (
-    <Reveal>
-      <section className="py-20 md:py-32">
-        <div className="mx-auto max-w-6xl px-5">
-          <p className="text-[11px] font-semibold text-[#3E4095] uppercase tracking-[0.15em] mb-4">Por que contratar</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#0f172a] mb-16 max-w-lg">
-            Proteger sua carga não é opcional.
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-10 md:gap-16">
-            {items.map((item, i) => (
-              <div key={i}>
-                <div className="w-10 h-10 rounded-lg bg-[#f8fafc] border border-[#f1f5f9] flex items-center justify-center mb-5">
-                  <item.icon className="w-5 h-5 text-[#3E4095]" />
-                </div>
-                <h3 className="text-base font-semibold text-[#0f172a] mb-2">{item.title}</h3>
-                <p className="text-sm leading-relaxed text-[#64748b]">{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   6. COBERTURAS — com consequências legais
-   ═══════════════════════════════════════════ */
-const COVERAGES = [
-  {
-    tag: "Obrigatório",
-    title: "RCTR-C",
-    subtitle: "Responsabilidade Civil do Transportador Rodoviário de Carga",
-    text: "Cobre danos materiais causados às mercadorias durante o transporte terrestre. Obrigatório por lei para todo transportador.",
-    points: ["Colisão e tombamento", "Incêndio e explosão", "Avarias durante transbordo"],
-    consequence: "Sem RCTR-C: multa + suspensão do registro ANTT",
-  },
-  {
-    tag: "Recomendado",
-    title: "RC-DC",
-    subtitle: "Responsabilidade Civil — Desvio de Carga",
-    text: "Protege contra desaparecimento total ou parcial da carga por roubo, furto qualificado ou desvio.",
-    points: ["Roubo e furto qualificado", "Desvio de mercadoria", "Desaparecimento do veículo"],
-    consequence: "Sem RC-DC: prejuízo integral recai sobre o transportador",
-  },
-  {
-    tag: "Complementar",
-    title: "RC-V",
-    subtitle: "Responsabilidade Civil de Veículo",
-    text: "Cobertura para danos materiais e corporais causados a terceiros durante a operação de transporte.",
-    points: ["Danos a terceiros", "Danos corporais", "Custos judiciais"],
-    consequence: "Sem RC-V: transportador responde com patrimônio próprio",
-  },
-];
-
-function Coverages() {
-  return (
-    <Reveal>
-      <section id="coberturas" className="py-20 md:py-32">
-        <div className="mx-auto max-w-6xl px-5">
-          <p className="text-[11px] font-semibold text-[#3E4095] uppercase tracking-[0.15em] mb-4">Coberturas</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#0f172a] mb-16 max-w-lg">
-            Proteção completa para cada necessidade.
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {COVERAGES.map((c, i) => (
-              <div
-                key={i}
-                className="group rounded-2xl border border-[#f1f5f9] bg-white p-7 hover:border-[#3E4095]/20 hover:shadow-lg transition-all duration-300 flex flex-col"
-              >
-                <span className="inline-block text-[10px] font-semibold uppercase tracking-widest text-[#3E4095] bg-[#3E4095]/[0.06] px-2.5 py-1 rounded-md mb-5 w-fit">
-                  {c.tag}
-                </span>
-                <h3 className="text-2xl font-bold text-[#0f172a] mb-1">{c.title}</h3>
-                <p className="text-xs text-[#94a3b8] mb-4">{c.subtitle}</p>
-                <p className="text-sm text-[#64748b] leading-relaxed mb-6">{c.text}</p>
-                <ul className="space-y-2.5 mb-6">
-                  {c.points.map((p, j) => (
-                    <li key={j} className="flex items-center gap-2 text-[13px] text-[#475569]">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#3E4095] flex-shrink-0" /> {p}
-                    </li>
-                  ))}
-                </ul>
-                {/* Consequência legal */}
-                <div className="mt-auto pt-4 border-t border-[#f1f5f9]">
-                  <p className="text-[11px] text-red-500/80 font-medium flex items-start gap-1.5">
-                    <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" /> {c.consequence}
-                  </p>
-                </div>
-                <a href="#form" className="text-[13px] font-semibold text-[#3E4095] inline-flex items-center gap-1 group-hover:gap-2 transition-all mt-5">
-                  Solicitar cotação <ChevronRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   7. TIPOS DE CARGA
-   ═══════════════════════════════════════════ */
-const CARGO = [
-  { icon: Leaf, label: "Grãos e Commodities" },
-  { icon: Cpu, label: "Eletrônicos" },
-  { icon: Package, label: "Perecíveis" },
-  { icon: HardHat, label: "Materiais de Construção" },
-  { icon: Truck, label: "Máquinas e Equipamentos" },
-  { icon: FlaskConical, label: "Produtos Químicos" },
-  { icon: Shirt, label: "Vestuário e Têxteis" },
-  { icon: Boxes, label: "Carga Geral" },
-];
-
-function CargoTypes() {
-  return (
-    <Reveal>
-      <section className="py-20 md:py-32 bg-[#fafafa]">
-        <div className="mx-auto max-w-6xl px-5">
-          <p className="text-[11px] font-semibold text-[#3E4095] uppercase tracking-[0.15em] mb-4">Tipos de carga</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#0f172a] mb-16 max-w-lg">
-            Protegemos os mais variados tipos de carga.
-          </h2>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 stagger">
-            {CARGO.map((c, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-xl border border-[#f1f5f9] p-5 flex flex-col items-center text-center hover:border-[#3E4095]/15 hover:shadow-sm transition-all duration-200"
-              >
-                <div className="w-11 h-11 rounded-lg bg-[#f8fafc] flex items-center justify-center mb-3">
-                  <c.icon className="w-5 h-5 text-[#64748b]" />
-                </div>
-                <span className="text-[13px] font-medium text-[#475569]">{c.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   8. COMO FUNCIONA — timeline 4 etapas
-   ═══════════════════════════════════════════ */
-const STEPS = [
-  { icon: MessageCircle, num: "01", title: "Cotação", desc: "Preencha o formulário ou fale conosco pelo WhatsApp. É rápido e sem compromisso." },
-  { icon: FileText, num: "02", title: "Proposta", desc: "Receba propostas personalizadas das melhores seguradoras do mercado em até 24h." },
-  { icon: Search, num: "03", title: "Análise", desc: "Nossa equipe especializada analisa cada detalhe para encontrar a melhor cobertura." },
-  { icon: Send, num: "04", title: "Emissão", desc: "Apólice emitida digitalmente. Sua carga protegida para viajar com tranquilidade." },
-];
-
-function HowItWorks() {
-  return (
-    <Reveal>
-      <section id="como-funciona" className="py-20 md:py-32">
-        <div className="mx-auto max-w-6xl px-5">
-          <p className="text-[11px] font-semibold text-[#3E4095] uppercase tracking-[0.15em] mb-4">Como funciona</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#0f172a] mb-16 max-w-lg">
-            Do pedido à apólice em 4 passos.
-          </h2>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {STEPS.map((s, i) => (
-              <div key={i} className="relative">
-                {/* Connector line (desktop) */}
-                {i < STEPS.length - 1 && (
-                  <div className="hidden lg:block absolute top-6 left-[calc(50%+28px)] w-[calc(100%-56px)] h-px bg-gradient-to-r from-[#3E4095]/20 to-[#3E4095]/5" />
-                )}
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-12 h-12 rounded-2xl bg-[#3E4095] flex items-center justify-center mb-4 shadow-lg shadow-[#3E4095]/20">
-                    <s.icon className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="text-[10px] font-bold text-[#3E4095]/40 tracking-widest mb-2">{s.num}</span>
-                  <h3 className="text-base font-semibold text-[#0f172a] mb-2">{s.title}</h3>
-                  <p className="text-[13px] leading-relaxed text-[#64748b]">{s.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   9. QUEM ATENDEMOS
-   ═══════════════════════════════════════════ */
-const AUDIENCES = [
-  { icon: Truck, label: "Transportadoras", desc: "Frotas de qualquer porte em todo o território nacional." },
-  { icon: Building2, label: "Embarcadores", desc: "Empresas que contratam frete para enviar mercadorias." },
-  { icon: Factory, label: "Indústrias", desc: "Proteção para envio de matéria-prima e produtos acabados." },
-  { icon: ShoppingCart, label: "E-commerce", desc: "Segurança para entregas de alta frequência e volume." },
-  { icon: Warehouse, label: "Operadores Logísticos", desc: "Cobertura completa para operações multimodais." },
-  { icon: Users, label: "Cooperativas", desc: "Soluções coletivas com condições especiais." },
-];
-
-function WhoWeServe() {
-  return (
-    <Reveal>
-      <section className="py-20 md:py-32 bg-[#fafafa]">
-        <div className="mx-auto max-w-6xl px-5">
-          <p className="text-[11px] font-semibold text-[#3E4095] uppercase tracking-[0.15em] mb-4">Quem atendemos</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#0f172a] mb-16 max-w-lg">
-            Soluções para todos os perfis do setor.
-          </h2>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {AUDIENCES.map((a, i) => (
-              <div key={i} className="flex items-start gap-4 bg-white rounded-xl border border-[#f1f5f9] p-5 hover:border-[#3E4095]/15 hover:shadow-sm transition-all duration-200">
-                <div className="w-10 h-10 rounded-lg bg-[#3E4095]/[0.06] flex items-center justify-center flex-shrink-0">
-                  <a.icon className="w-5 h-5 text-[#3E4095]" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-[#0f172a] mb-1">{a.label}</h3>
-                  <p className="text-[13px] text-[#64748b] leading-relaxed">{a.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   10. DIFERENCIAIS/NÚMEROS
-   ═══════════════════════════════════════════ */
-function Differentials() {
-  const stats = [
-    { icon: Users, value: 1000, suffix: "+", label: "Clientes protegidos" },
-    { icon: Award, value: 10, suffix: "+", label: "Anos de experiência" },
-    { icon: Shield, value: 8, suffix: "", label: "Seguradoras parceiras" },
-    { icon: Zap, value: 98, suffix: "%", label: "Índice de satisfação" },
-  ];
-
-  const features = [
-    { icon: Clock, title: "Atendimento 24h", text: "Suporte completo todos os dias, a qualquer hora." },
-    { icon: Zap, title: "Cotação em minutos", text: "Processo ágil e digital, sem burocracia." },
-    { icon: Users, title: "Especialistas em carga", text: "Equipe dedicada ao segmento de transporte." },
-    { icon: Award, title: "+10 anos de mercado", text: "Experiência e solidez no que fazemos." },
-  ];
-
-  return (
-    <Reveal>
-      <section id="diferenciais" className="py-20 md:py-32">
-        <div className="mx-auto max-w-6xl px-5">
-          <p className="text-[11px] font-semibold text-[#3E4095] uppercase tracking-[0.15em] mb-4">Nossos números</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#0f172a] mb-16 max-w-lg">
-            A JJ & Amorim em números.
-          </h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
-            {stats.map((s, i) => (
-              <div key={i} className="text-center md:text-left">
-                <div className="text-4xl md:text-5xl font-black text-[#0f172a] mb-1">
-                  <Counter to={s.value} suffix={s.suffix} />
-                </div>
-                <p className="text-sm text-[#94a3b8]">{s.label}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="section-divider mb-16" />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            {features.map((f, i) => (
-              <div key={i}>
-                <div className="w-10 h-10 rounded-lg bg-[#fafafa] border border-[#f1f5f9] flex items-center justify-center mb-4 shadow-sm">
-                  <f.icon className="w-5 h-5 text-[#3E4095]" />
-                </div>
-                <h3 className="text-sm font-semibold text-[#0f172a] mb-1">{f.title}</h3>
-                <p className="text-[13px] leading-relaxed text-[#94a3b8]">{f.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   11. EVITE — grid de dores do cliente
-   ═══════════════════════════════════════════ */
-const AVOID_ITEMS = [
-  { icon: Ban, title: "Perda total da carga", desc: "Sem seguro, todo o prejuízo recai sobre você." },
-  { icon: TrendingDown, title: "Rompimento de contratos", desc: "Embarcadores exigem seguro para manter parceria." },
-  { icon: FileWarning, title: "Multas e sanções da ANTT", desc: "Operar sem seguro gera infrações graves e suspensão." },
-  { icon: Scale, title: "Processos judiciais", desc: "Responder com patrimônio pessoal por danos a terceiros." },
-];
-
-function AvoidSection() {
-  return (
-    <Reveal>
-      <section className="py-20 md:py-32 bg-[#fafafa]">
-        <div className="mx-auto max-w-6xl px-5">
-          <p className="text-[11px] font-semibold text-red-500/80 uppercase tracking-[0.15em] mb-4">Evite</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#0f172a] mb-16 max-w-lg">
-            O que acontece sem seguro?
-          </h2>
-
-          <div className="grid sm:grid-cols-2 gap-5">
-            {AVOID_ITEMS.map((item, i) => (
-              <div key={i} className="bg-white rounded-xl border border-red-100 p-6 flex items-start gap-4 hover:border-red-200 transition-all duration-200">
-                <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
-                  <item.icon className="w-5 h-5 text-red-400" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-[#0f172a] mb-1">{item.title}</h3>
-                  <p className="text-[13px] text-[#64748b] leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   12. FORMULÁRIO EXPANDIDO
-   ═══════════════════════════════════════════ */
-function FormSection() {
-  const [form, setForm] = useState({
-    nome: "", email: "", whats: "", tipo: "", origem: "", destino: "", valor: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate();
-  const { toast } = useToast();
-
-  const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-    setForm(prev => ({ ...prev, [field]: e.target.value }));
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const { error } = await supabase.from('leads').upsert(
-        {
-          email: form.email,
-          name: form.nome,
-          phone: form.whats,
-          insurance_type: 'Transporte',
-          last_step_index: 3,
-          is_completed: true,
-          rd_station_synced: false,
-          custom_fields: {
-            cargo_type: form.tipo,
-            origin: form.origem,
-            destination: form.destino,
-            estimated_value: form.valor
-          }
-        },
-        { onConflict: 'email', ignoreDuplicates: false }
-      );
-
-      if (error) throw error;
-
-      // Navigate exactly like jjseguros logic
-      navigate('/sucesso');
-    } catch (err) {
-      console.error(err);
-      toast({
-        title: "Erro ao enviar",
-        description: "Ocorreu um problema ao enviar seus dados. Tente novamente.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const inputCls = "w-full px-4 py-3 rounded-xl border border-[#e2e8f0] bg-white text-sm placeholder:text-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-[#3E4095]/20 focus:border-[#3E4095]/40 transition-all";
-
-  return (
-    <Reveal>
-      <section id="form" className="py-20 md:py-32">
-        <div className="mx-auto max-w-6xl px-5">
-          <div className="mx-auto max-w-lg">
-            <div className="text-center mb-10">
-              <p className="text-[11px] font-semibold text-[#3E4095] uppercase tracking-[0.15em] mb-4">Cotação</p>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#0f172a] mb-3">
-                Comece agora.
-              </h2>
-              <p className="text-sm text-[#94a3b8]">Preencha o formulário e receba sua cotação em até 24h.</p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[13px] font-medium text-[#475569] mb-1.5">Nome completo</label>
-                  <input type="text" required value={form.nome} onChange={update("nome")} placeholder="Seu nome" className={inputCls} />
-                </div>
-                <div>
-                  <label className="block text-[13px] font-medium text-[#475569] mb-1.5">E-mail</label>
-                  <input type="email" required value={form.email} onChange={update("email")} placeholder="seu@email.com" className={inputCls} />
-                </div>
-              </div>
-              <div>
-                <label className="block text-[13px] font-medium text-[#475569] mb-1.5">WhatsApp</label>
-                <input type="tel" required value={form.whats} onChange={update("whats")} placeholder="(00) 00000-0000" className={inputCls} />
-              </div>
-              <div>
-                <label className="block text-[13px] font-medium text-[#475569] mb-1.5">Tipo de Carga</label>
-                <select required value={form.tipo} onChange={update("tipo")} className={`${inputCls} appearance-none`}>
-                  <option value="">Selecione o tipo de carga</option>
-                  <option value="graos">Grãos e Commodities</option>
-                  <option value="eletronicos">Eletrônicos</option>
-                  <option value="pereciveis">Perecíveis</option>
-                  <option value="construcao">Materiais de Construção</option>
-                  <option value="maquinas">Máquinas e Equipamentos</option>
-                  <option value="quimicos">Produtos Químicos</option>
-                  <option value="texteis">Vestuário e Têxteis</option>
-                  <option value="geral">Carga Geral</option>
-                </select>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[13px] font-medium text-[#475569] mb-1.5">Origem</label>
-                  <input type="text" value={form.origem} onChange={update("origem")} placeholder="Cidade / Estado" className={inputCls} />
-                </div>
-                <div>
-                  <label className="block text-[13px] font-medium text-[#475569] mb-1.5">Destino</label>
-                  <input type="text" value={form.destino} onChange={update("destino")} placeholder="Cidade / Estado" className={inputCls} />
-                </div>
-              </div>
-              <div>
-                <label className="block text-[13px] font-medium text-[#475569] mb-1.5">Valor estimado da carga</label>
-                <input type="text" value={form.valor} onChange={update("valor")} placeholder="R$ 0,00" className={inputCls} />
-              </div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="btn-primary w-full py-3.5 rounded-xl text-[15px] font-semibold flex items-center justify-center gap-2 mt-2 disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <>Verificando disponibilidade... <Loader2 className="w-4 h-4 animate-spin" /></>
-                ) : (
-                  <>Solicitar Cotação <ArrowRight className="w-4 h-4" /></>
-                )}
-              </button>
-              <p className="text-xs text-center text-[#94a3b8] pt-1">Sem compromisso · Seus dados estão protegidos</p>
-            </form>
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   13. CTA FINAL
-   ═══════════════════════════════════════════ */
-function FinalCTA() {
-  return (
-    <Reveal>
-      <section className="relative py-20 md:py-32 overflow-hidden">
-        {/* Background image with overlay */}
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1400&h=600&fit=crop&q=80"
-            alt=""
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-foreground/85" />
-        </div>
-
-        <div className="mx-auto max-w-6xl px-5 text-center relative z-10">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-5 text-primary-foreground">
-            Garanta a segurança da sua carga.
-          </h2>
-          <p className="text-lg text-primary-foreground/50 max-w-xl mx-auto mb-10">
-            Solicite uma cotação sem compromisso e proteja seu patrimônio com as melhores seguradoras do mercado.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="#form" className="bg-background text-foreground px-7 py-3.5 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2 hover:bg-background/90 transition-all">
-              Solicitar Cotação <ArrowRight className="w-4 h-4" />
-            </a>
-            <a href={WA} target="_blank" rel="noopener noreferrer" className="border border-primary-foreground/20 text-primary-foreground px-7 py-3.5 rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2 hover:bg-primary-foreground/5 transition-all">
-              <MessageCircle className="w-4 h-4" /> Falar no WhatsApp
-            </a>
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   14. FOOTER — expandido com endereço, CNPJ, links
-   ═══════════════════════════════════════════ */
-function Footer() {
-  return (
-    <footer className="py-16 border-t border-border">
-      <div className="mx-auto max-w-6xl px-5">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-          {/* Brand */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-2.5 mb-4">
-              <img src={jjamorimLogo} alt="JJ & Amorim Corretora de Seguros" className="h-10 w-auto object-contain" />
-            </div>
-            <p className="text-[13px] text-muted-foreground leading-relaxed max-w-sm mb-3">
-              Especialistas em seguro de transporte de cargas há mais de 10 anos. Protegemos empresas em todo o Brasil com as melhores seguradoras do mercado.
-            </p>
-            <p className="text-[12px] text-muted-foreground/50">CNPJ: 21.364.352/0001-04</p>
-          </div>
-
-          {/* Links */}
-          <div>
-            <h4 className="text-xs font-semibold text-[#475569] uppercase tracking-wider mb-4">Navegação</h4>
-            <div className="space-y-2.5">
-              <a href="#coberturas" className="block text-[13px] text-[#94a3b8] hover:text-[#475569] transition-colors">Coberturas</a>
-              <a href="#como-funciona" className="block text-[13px] text-[#94a3b8] hover:text-[#475569] transition-colors">Como Funciona</a>
-              <a href="#diferenciais" className="block text-[13px] text-[#94a3b8] hover:text-[#475569] transition-colors">Diferenciais</a>
-              <a href="#form" className="block text-[13px] text-[#94a3b8] hover:text-[#475569] transition-colors">Solicitar Cotação</a>
-            </div>
-          </div>
-
-          {/* Contato */}
-          <div>
-            <h4 className="text-xs font-semibold text-[#475569] uppercase tracking-wider mb-4">Contato</h4>
-            <div className="space-y-2.5 text-[13px] text-[#94a3b8]">
-              <a href={`tel:${TEL.replace(/\D/g, "")}`} className="flex items-center gap-2 hover:text-[#475569] transition-colors">
-                <Phone className="w-3.5 h-3.5" /> {TEL}
-              </a>
-              <a href={WA} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#475569] transition-colors">
-                <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
-              </a>
-              <p className="leading-relaxed pt-1">
-                R. Frei Gaspar, 941 — Sala 603<br />
-                São Bernardo do Campo — SP
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="section-divider mb-6" />
-        <p className="text-[12px] text-[#cbd5e1] text-center">&copy; {new Date().getFullYear()} JJ & Amorim Corretora de Seguros. Todos os direitos reservados.</p>
-      </div>
-    </footer>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   15. STICKY CTA (mobile) + WhatsApp Float
-   ═══════════════════════════════════════════ */
-function StickyCTA() {
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    const fn = () => setShow(window.scrollY > 500);
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-  if (!show) return null;
-  return (
-    <div className="fixed bottom-0 inset-x-0 z-40 md:hidden p-3 bg-white/90 backdrop-blur-lg border-t border-[#f1f5f9]">
-      <a href="#form" className="btn-primary block text-center py-3 rounded-xl text-sm font-semibold">
-        Solicitar Cotação Grátis
-      </a>
-    </div>
-  );
-}
-
-function WhatsAppFloat() {
-  return (
-    <a href={WA} target="_blank" rel="noopener noreferrer" className="whatsapp-float" aria-label="WhatsApp">
-      <MessageCircle className="w-5 h-5" />
-    </a>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   PAGE — todas as 15 seções
-   ═══════════════════════════════════════════ */
 export default function Index() {
-  return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <Hero />
-      <TrustBar />
-      <UrgencyData />
-      <WhyHire />
-      <Coverages />
-      <CargoTypes />
-      <HowItWorks />
-      <WhoWeServe />
-      <Differentials />
-      <AvoidSection />
-      <FormSection />
-      <FinalCTA />
-      <Footer />
-      <StickyCTA />
-      <WhatsAppFloat />
-    </div>
-  );
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [form, setForm] = useState({
+        nome: "", email: "", whats: "", tipo: "", origem: "", destino: "", valor: "",
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
+    const { toast } = useToast();
+
+    useEffect(() => {
+        if (isDarkMode) document.documentElement.classList.add('dark');
+        else document.documentElement.classList.remove('dark');
+    }, [isDarkMode]);
+
+    const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+        setForm(prev => ({ ...prev, [field]: e.target.value }));
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            // TODO: Integrar com Supabase no futuro
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            console.log("Form data submitted:", form);
+            toast({
+                title: "Sucesso!",
+                description: "Formulário enviado com sucesso.",
+            });
+            // navigate('/sucesso');
+        } catch (err) {
+            console.error(err);
+            toast({
+                title: "Erro ao enviar",
+                description: "Ocorreu um problema ao enviar seus dados. Tente novamente.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <div className="bg-[#f8fafc] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors duration-300 min-h-screen">
+
+            <nav
+                className="fixed w-full z-50 top-0 transition-all duration-300 backdrop-blur-md bg-white/70 dark:bg-[#0f172a]/70 border-b border-slate-200/50 dark:border-slate-700/50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between items-center h-20">
+                        <div className="flex items-center space-x-3">
+                            <div
+                                className="w-10 h-10 bg-gradient-to-br from-[#3b5bdb] to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                                JJ</div>
+                            <span className="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white">JJ <span
+                                className="text-[#3b5bdb]">&amp;</span> Amorim</span>
+                        </div>
+                        <div className="hidden md:flex space-x-8 text-sm font-medium">
+                            <a className="text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb] dark:hover:text-[#3b5bdb] transition-colors"
+                                href="#">Produtos</a>
+                            <a className="text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb] dark:hover:text-[#3b5bdb] transition-colors"
+                                href="#">Sobre Nós</a>
+                            <a className="text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb] dark:hover:text-[#3b5bdb] transition-colors"
+                                href="#">Sinistros</a>
+                            <a className="text-slate-600 dark:text-slate-300 hover:text-[#3b5bdb] dark:hover:text-[#3b5bdb] transition-colors"
+                                href="#">Contato</a>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                            <button onClick={() => setIsDarkMode(!isDarkMode)} aria-label="Toggle Dark Mode" className="bg-slate-100 dark:bg-slate-800 p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">{isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}</button>
+                            <a className="hidden md:inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-full text-white bg-[#3b5bdb] hover:bg-blue-700 shadow-[0_0_20px_-5px_rgba(59,91,219,0.5)] transition-all duration-300 hover:-translate-y-0.5"
+                                href="#cotacao">
+                                Área do Cliente
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+                <div className="absolute inset-0 z-0 pointer-events-none">
+                    <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-[#3b5bdb]/10 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-[#f59e0b]/10 rounded-full blur-3xl"></div>
+                </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
+                        <div className="lg:col-span-6 text-center lg:text-left mb-12 lg:mb-0">
+                            <div
+                                className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 text-[#3b5bdb] text-xs font-semibold tracking-wide uppercase mb-6">
+                                <span className="w-2 h-2 rounded-full bg-[#3b5bdb] mr-2 animate-pulse"></span>
+                                Especialistas em Logística
+                            </div>
+                            <h1
+                                className="text-4xl lg:text-6xl font-display font-extrabold tracking-tight text-slate-900 dark:text-white mb-6 leading-tight">
+                                Seguro de Carga <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3b5bdb] to-blue-400">Premium
+                                    &amp; Seguro</span>
+                            </h1>
+                            <p
+                                className="mt-4 text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                                Proteção total para o seu negócio com a transparência que você merece. Tecnologia e atendimento
+                                humanizado unidos para garantir que sua carga chegue ao destino.
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                                <a className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-full text-white bg-[#3b5bdb] hover:bg-blue-700 shadow-lg hover:shadow-[#3b5bdb]/30 transition-all duration-300"
+                                    href="#">
+                                    Cotação Rápida
+                                    <ArrowRight className="w-5 h-5" />
+                                </a>
+                                <a className="inline-flex items-center justify-center px-8 py-4 border border-slate-200 dark:border-slate-700 text-base font-medium rounded-full text-slate-700 dark:text-white bg-white dark:bg-[#1e293b] hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-300"
+                                    href="#">
+                                    <Phone className="w-5 h-5" />
+                                    Falar com Consultor
+                                </a>
+                            </div>
+                            <div
+                                className="mt-10 flex items-center justify-center lg:justify-start gap-x-6 grayscale opacity-60 dark:invert">
+                                <div className="font-bold text-xl text-slate-400">HDI</div>
+                                <div className="font-bold text-xl text-slate-400">TOKIO</div>
+                                <div className="font-bold text-xl text-slate-400">ALLIANZ</div>
+                                <div className="font-bold text-xl text-slate-400">PORTO</div>
+                            </div>
+                        </div>
+                        <div className="lg:col-span-6 relative">
+                            <div
+                                className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-700">
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent z-10"></div>
+                                <img alt="Large container ship navigating calm waters at sunset"
+                                    className="w-full h-[500px] object-cover transform hover:scale-105 transition-transform duration-700"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNC4xmIzrvgU5QU4laJX38qvoJgwkcpW28o2jpmrPdD4oN2l7P46CKwwtfofze-1Sb-6-jfMPTVcyuBElu2Ro6kpz3QxkBZLyc3dDGmJkaQpCJoVnC6i-dCluY3caWurqzJ_1dyWUlreOYMVU3cjLmpdw3jSCZPy6TCvsoBTL47tzLgEB9ktN7aFiNob3-tNmp1esi_cHxm5aXmISnjC3GjAIcGMf0K-8rxeo1zeMWLX6RYnFjKkqu19IfRgcClhVcq3Hskw8udm4" />
+                                <div
+                                    className="absolute bottom-8 left-8 z-20 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 rounded-xl shadow-lg max-w-xs border border-white/20">
+                                    <div className="flex items-start space-x-3">
+                                        <div
+                                            className="bg-green-100 dark:bg-green-900/50 p-2 rounded-lg text-green-600 dark:text-green-400">
+                                            <ShieldCheck className="w-5 h-5" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-slate-900 dark:text-white">Apólice Ativa</p>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">Cobertura total confirmada</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    className="absolute top-8 right-8 z-20 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/20">
+                                    <div className="text-center">
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Sinistros
+                                            Recuperados</p>
+                                        <p className="text-2xl font-bold text-[#3b5bdb] mt-1">R$ 7 Mi+</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section className="py-20 bg-white dark:bg-[#1e293b] border-y border-slate-100 dark:border-slate-800">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <h2 className="text-base text-[#3b5bdb] font-semibold tracking-wide uppercase mb-2">Análise de Risco</h2>
+                            <h3 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">Sua carga está mais exposta do
+                                que você imagina.</h3>
+                            <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                                Acidentes com caminhões continuam crescendo nas estradas brasileiras. Sem a proteção adequada,
+                                um único incidente pode comprometer todo o fluxo de caixa da sua transportadora.
+                            </p>
+                            <ul className="space-y-4 mb-8">
+                                <li className="flex items-center text-slate-700 dark:text-slate-300">
+                                    <span
+                                        className="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-500 mr-3">
+                                        <AlertTriangle className="w-5 h-5" />
+                                    </span>
+                                    31.232 acidentes com veículos de carga
+                                </li>
+                                <li className="flex items-center text-slate-700 dark:text-slate-300">
+                                    <span
+                                        className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-500 mr-3">
+                                        <AlertTriangle className="w-5 h-5" />
+                                    </span>
+                                    17.108 roubos de carga registrados
+                                </li>
+                            </ul>
+                            <a className="text-[#3b5bdb] font-medium hover:text-blue-700 flex items-center group" href="#">
+                                Ver estatísticas completas
+                                <span
+                                    className="material-icons-outlined ml-1 group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+                            </a>
+                        </div>
+                        <div
+                            className="bg-[#f8fafc] dark:bg-[#0f172a] p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-inner relative">
+                            <div className="flex justify-between items-end mb-4">
+                                <div>
+                                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Índice de Acidentes</p>
+                                    <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">+12% <span
+                                        className="text-sm font-normal text-red-500">vs ano anterior</span></p>
+                                </div>
+                                <div className="flex space-x-2">
+                                    <span className="w-3 h-3 rounded-full bg-[#3b5bdb]"></span>
+                                    <span className="w-3 h-3 rounded-full bg-[#f59e0b]"></span>
+                                </div>
+                            </div>
+                            <div className="h-64 w-full relative">
+                                <div className="absolute inset-0 flex flex-col justify-between">
+                                    <div className="w-full h-px bg-slate-200 dark:bg-slate-700 border-dashed border-t"></div>
+                                    <div className="w-full h-px bg-slate-200 dark:bg-slate-700 border-dashed border-t"></div>
+                                    <div className="w-full h-px bg-slate-200 dark:bg-slate-700 border-dashed border-t"></div>
+                                    <div className="w-full h-px bg-slate-200 dark:bg-slate-700 border-dashed border-t"></div>
+                                    <div className="w-full h-px bg-slate-200 dark:bg-slate-700 border-dashed border-t"></div>
+                                </div>
+                                <svg className="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none"
+                                    viewBox="0 0 100 100">
+                                    <path className="text-[#3b5bdb] drop-shadow-md" d="M0,80 C20,75 40,60 50,50 C60,40 80,30 100,10"
+                                        fill="none" stroke="currentColor" strokeWidth="3"></path>
+                                    <path d="M0,80 C20,75 40,60 50,50 C60,40 80,30 100,10 V100 H0 Z"
+                                        fill="url(#gradientPrimary)" opacity="0.1"></path>
+                                    <path className="text-[#f59e0b] drop-shadow-md" d="M0,90 C30,85 50,70 70,60 C80,55 90,45 100,40"
+                                        fill="none" stroke="currentColor" strokeWidth="3" style={{ strokeDasharray: '5,5' }}>
+                                    </path>
+                                    <defs>
+                                        <linearGradient id="gradientPrimary" x1="0%" x2="0%" y1="0%" y2="100%">
+                                            <stop className="text-[#3b5bdb]" offset="0%"
+                                                style={{ stopColor: 'currentColor', stopOpacity: 1 }}></stop>
+                                            <stop className="text-[#3b5bdb]" offset="100%"
+                                                style={{ stopColor: 'currentColor', stopOpacity: 0 }}></stop>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <div
+                                    className="absolute top-[10%] right-0 w-4 h-4 bg-white border-2 border-[#3b5bdb] rounded-full shadow-lg transform translate-x-1/2 -translate-y-1/2 z-10">
+                                </div>
+                                <div
+                                    className="absolute top-[40%] right-0 w-4 h-4 bg-white border-2 border-[#f59e0b] rounded-full shadow-lg transform translate-x-1/2 -translate-y-1/2 z-10">
+                                </div>
+                            </div>
+                            <div className="flex justify-between mt-4 text-xs text-slate-400">
+                                <span>Jan</span><span>Mar</span><span>Jun</span><span>Set</span><span>Dez</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section className="py-24 bg-[#f8fafc] dark:bg-[#0f172a] relative">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16">
+                        <h2 className="text-base text-[#3b5bdb] font-semibold tracking-wide uppercase">Soluções Completas</h2>
+                        <p
+                            className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+                            Proteção sob medida para cada modalidade
+                        </p>
+                    </div>
+                    <div className="grid md:grid-cols-3 gap-8">
+                        <div
+                            className="bg-white dark:bg-[#1e293b] rounded-2xl p-8 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 flex flex-col group">
+                            <div
+                                className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-[#3b5bdb] mb-6 group-hover:scale-110 transition-transform">
+                                <Truck className="w-5 h-5" />
+                            </div>
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Seguro RCTR-C</h3>
+                            <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-grow">
+                                Responsabilidade Civil do Transportador Rodoviário de Carga. Cobre danos a terceiros causados
+                                por acidentes como colisão, capotagem e tombamento.
+                            </p>
+                            <a className="inline-flex items-center text-sm font-semibold text-[#3b5bdb] hover:text-blue-700" href="#">
+                                Saiba mais <ArrowRight className="w-5 h-5" />
+                            </a>
+                        </div>
+                        <div
+                            className="bg-white dark:bg-[#1e293b] rounded-2xl p-8 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 flex flex-col group relative overflow-hidden">
+                            <div
+                                className="absolute top-0 right-0 bg-[#f59e0b] text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg">
+                                POPULAR</div>
+                            <div
+                                className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center text-amber-600 mb-6 group-hover:scale-110 transition-transform">
+                                <Package className="w-5 h-5" />
+                            </div>
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Seguro RC-DC</h3>
+                            <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-grow">
+                                Proteção contra roubo e desaparecimento de carga. Essencial para operações em regiões de risco,
+                                garantindo a reposição do valor da mercadoria.
+                            </p>
+                            <a className="inline-flex items-center text-sm font-semibold text-[#3b5bdb] hover:text-blue-700" href="#">
+                                Saiba mais <ArrowRight className="w-5 h-5" />
+                            </a>
+                        </div>
+                        <div
+                            className="bg-white dark:bg-[#1e293b] rounded-2xl p-8 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 flex flex-col group">
+                            <div
+                                className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center text-purple-600 mb-6 group-hover:scale-110 transition-transform">
+                                <Ship className="w-5 h-5" />
+                            </div>
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Seguro RC-V</h3>
+                            <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-grow">
+                                Responsabilidade Civil de Veículos. Proteção adicional para danos corporais e materiais a
+                                terceiros não transportados.
+                            </p>
+                            <a className="inline-flex items-center text-sm font-semibold text-[#3b5bdb] hover:text-blue-700" href="#">
+                                Saiba mais <ArrowRight className="w-5 h-5" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section className="py-20 bg-[#3b5bdb] relative overflow-hidden">
+                <div className="absolute inset-0 opacity-10"
+                    style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fillRule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fillOpacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');">
+                </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl font-bold text-white mb-2">A JJ &amp; Amorim em números</h2>
+                        <p className="text-blue-100">Mais de uma década de experiência protegendo famílias e empresas.</p>
+                    </div>
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div className="text-center p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10">
+                            <div className="text-4xl lg:text-5xl font-extrabold text-white mb-2 tracking-tight">+10</div>
+                            <div className="text-sm font-medium text-blue-100 uppercase tracking-wider">Anos de História</div>
+                        </div>
+                        <div className="text-center p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10">
+                            <div className="text-4xl lg:text-5xl font-extrabold text-white mb-2 tracking-tight">+999</div>
+                            <div className="text-sm font-medium text-blue-100 uppercase tracking-wider">Clientes Protegidos</div>
+                        </div>
+                        <div className="text-center p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10">
+                            <div className="text-4xl lg:text-5xl font-extrabold text-white mb-2 tracking-tight">R$ 7M+</div>
+                            <div className="text-sm font-medium text-blue-100 uppercase tracking-wider">Em Sinistros Pagos</div>
+                        </div>
+                        <div className="text-center p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10">
+                            <div className="text-4xl lg:text-5xl font-extrabold text-white mb-2 tracking-tight">96%</div>
+                            <div className="text-sm font-medium text-blue-100 uppercase tracking-wider">De Satisfação</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section className="py-24 bg-white dark:bg-[#1e293b]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between items-center mb-12">
+                        <div>
+                            <h2 className="text-3xl font-bold text-slate-900 dark:text-white">O que nossos parceiros dizem</h2>
+                            <p className="mt-2 text-slate-600 dark:text-slate-400">Feedback real de quem confia na JJ&amp;Amorim</p>
+                        </div>
+                        <div className="hidden md:flex space-x-2">
+                            <button
+                                className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                                <Star className="w-5 h-5" />
+                            </button>
+                            <button
+                                className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                                <ArrowRight className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </div>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div
+                            className="p-8 rounded-2xl bg-[#f8fafc] dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800 relative">
+                            <span className="absolute top-8 right-8 text-6xl text-[#3b5bdb]/10 font-serif leading-none">"</span>
+                            <div className="flex items-center mb-6">
+                                <img alt="Carlos Mendes" className="w-12 h-12 rounded-full object-cover mr-4"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDw_Yj0t3Q2OsLJhaSWAVS0nlBc5Orn0cOrpy9Zd5Mz4PiMJ4JZSU4D7GAnzRmuYZeaOyUJ0nVk6jE7Wj_9cEH7qQ8MSxr4mQHbpc2WbmBnUjlABE3uqqkYa0EZrcR3_ArEwm4uyHidSSPLQaw92_RjX2iY_L04rjr9EUDNabLxKgWpPb1NsAl2rBOWURlt31zWbSCoxJ2U1505UoFqr71piCwXOSZPwNV84dTspsTAx2D1JXILP1o8UNw5LCMeE9gsi0WKZOm6e0g" />
+                                <div>
+                                    <h4 className="font-bold text-slate-900 dark:text-white">Carlos Mendes</h4>
+                                    <p className="text-xs text-slate-500">Diretor, TransMendes Logística</p>
+                                </div>
+                            </div>
+                            <p className="text-slate-600 dark:text-slate-300 italic">
+                                "O atendimento humanizado faz toda a diferença. Tivemos um sinistro complicado mês passado e a
+                                equipe da JJ resolveu tudo em tempo recorde. Não troco por nada."
+                            </p>
+                            <div className="mt-4 flex text-[#f59e0b] text-sm">
+                                <Star className="w-5 h-5" />
+                                <Star className="w-5 h-5" />
+                                <Star className="w-5 h-5" />
+                                <Star className="w-5 h-5" />
+                                <Star className="w-5 h-5" />
+                            </div>
+                        </div>
+                        <div
+                            className="p-8 rounded-2xl bg-[#f8fafc] dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800 relative">
+                            <span className="absolute top-8 right-8 text-6xl text-[#3b5bdb]/10 font-serif leading-none">"</span>
+                            <div className="flex items-center mb-6">
+                                <img alt="Fernanda Lima" className="w-12 h-12 rounded-full object-cover mr-4"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA2g2PV3vRyOfA6_CqLARvxWtqQz8CJxivC2XipWFN-mYEDESYQo4jPPprT45gjhZVQh9HmPguEk02Gf2F200zn7LG65a7ykVG6dWn9fWSlIad3XqAr8LwmAogPr-c7ozkwXvtZA-svyRI9ZIJLAy_QxXLMMBYGxfRA9vzJ10IynGIc3zPpoeSUPHpHIxB6-f1IWppJPQVBHTUHNCqbVBtbb4j4Dvaewjymkra1iZq2iYRq0UnUCIDAZgvXaAt6m3O2AHiiAQJTOU" />
+                                <div>
+                                    <h4 className="font-bold text-slate-900 dark:text-white">Fernanda Lima</h4>
+                                    <p className="text-xs text-slate-500">Gerente Op., FastCargo</p>
+                                </div>
+                            </div>
+                            <p className="text-slate-600 dark:text-slate-300 italic">
+                                "Transparência é a palavra chave. As cotações são claras, sem letras miúdas. Sinto que meu
+                                patrimônio está realmente protegido."
+                            </p>
+                            <div className="mt-4 flex text-[#f59e0b] text-sm">
+                                <Star className="w-5 h-5" />
+                                <Star className="w-5 h-5" />
+                                <Star className="w-5 h-5" />
+                                <Star className="w-5 h-5" />
+                                <Star className="w-5 h-5" />
+                            </div>
+                        </div>
+                        <div
+                            className="p-8 rounded-2xl bg-[#f8fafc] dark:bg-[#0f172a] border border-slate-100 dark:border-slate-800 relative hidden lg:block">
+                            <span className="absolute top-8 right-8 text-6xl text-[#3b5bdb]/10 font-serif leading-none">"</span>
+                            <div className="flex items-center mb-6">
+                                <img alt="Roberto Silva" className="w-12 h-12 rounded-full object-cover mr-4"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL66avREyNlj9ZXMRwMP2GJXi_YaaxvdL8UU1rSUkKA5bxBSzlqHah8PlZaTRdt286QvUzA1UvWyYztt6xxJYtH-2qxNKI3BO3QavopL0MhpJ6G8UpTNtv9H-LAfNp3YCMU2XD99o23AA-tnGKAINzj5nLYmv_JcNhMtipkP6Bk4JjR1MMLupoi7wGjMWKSxmQhCcnaQvma8rosHGrwNicQj7MikSx5zmNQ7v9SPdff3y2OdiGw0sYNQ4JveFGNHJbWM5hv1ylydE" />
+                                <div>
+                                    <h4 className="font-bold text-slate-900 dark:text-white">Roberto Silva</h4>
+                                    <p className="text-xs text-slate-500">CEO, RotaSul Transportes</p>
+                                </div>
+                            </div>
+                            <p className="text-slate-600 dark:text-slate-300 italic">
+                                "Melhor custo-benefício do mercado. Conseguiram reduzir nossos custos com apólices em 15%
+                                mantendo a mesma cobertura."
+                            </p>
+                            <div className="mt-4 flex text-[#f59e0b] text-sm">
+                                <Star className="w-5 h-5" />
+                                <Star className="w-5 h-5" />
+                                <Star className="w-5 h-5" />
+                                <Star className="w-5 h-5" />
+                                <StarHalf className="w-5 h-5" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cotacao" className="py-20 px-4">
+                <div className="max-w-5xl mx-auto bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl shadow-2xl overflow-hidden relative">
+                    <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-[#3b5bdb] opacity-20 rounded-full blur-3xl"></div>
+                    <div className="relative z-10 px-8 py-16 md:p-12 text-center md:text-left md:flex md:items-start md:justify-between gap-12">
+                        <div className="md:w-1/2 mb-10 md:mb-0">
+                            <h2 className="text-3xl font-bold text-white mb-4">Pronto para operar com tranquilidade?</h2>
+                            <p className="text-slate-300 text-lg mb-8">
+                                Faça uma cotação gratuita hoje e descubra como podemos proteger o seu negócio.
+                            </p>
+                            <ul className="space-y-4 text-slate-300 text-left">
+                                <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-[#f59e0b] mr-3" /> Condições negociadas com as melhores seguradoras</li>
+                                <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-[#f59e0b] mr-3" /> Especialistas em logística rodoviária</li>
+                                <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-[#f59e0b] mr-3" /> Resposta para sua cotação em até 2 horas</li>
+                            </ul>
+                        </div>
+
+                        <div className="md:w-1/2 bg-white dark:bg-[#1e293b] rounded-2xl p-6 shadow-xl w-full text-left relative z-20">
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Receba sua cotação</h3>
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome / Empresa *</label>
+                                        <input required value={form.nome} onChange={update('nome')} type="text" className="w-full px-4 py-2 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-[#3b5bdb] focus:border-transparent outline-none transition-all dark:text-white" placeholder="Sua empresa" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">E-mail corporativo *</label>
+                                        <input required value={form.email} onChange={update('email')} type="email" className="w-full px-4 py-2 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-[#3b5bdb] focus:border-transparent outline-none transition-all dark:text-white" placeholder="voce@empresa.com" />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">WhatsApp *</label>
+                                        <input required value={form.whats} onChange={update('whats')} type="tel" className="w-full px-4 py-2 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-[#3b5bdb] focus:border-transparent outline-none transition-all dark:text-white" placeholder="(00) 00000-0000" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tipo de Carga</label>
+                                        <select value={form.tipo} onChange={update('tipo')} className="w-full px-4 py-2 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-[#3b5bdb] focus:border-transparent outline-none transition-all dark:text-white">
+                                            <option value="">Selecione...</option>
+                                            <option value="Geral">Carga Geral</option>
+                                            <option value="Refrigerada">Refrigerada</option>
+                                            <option value="Perigosa">Produtos Perigosos</option>
+                                            <option value="Granel">Granel</option>
+                                            <option value="Outros">Outros</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Origem Principal</label>
+                                        <input value={form.origem} onChange={update('origem')} type="text" className="w-full px-4 py-2 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-[#3b5bdb] focus:border-transparent outline-none transition-all dark:text-white" placeholder="Ex: São Paulo, SP" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Destino Principal</label>
+                                        <input value={form.destino} onChange={update('destino')} type="text" className="w-full px-4 py-2 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-[#3b5bdb] focus:border-transparent outline-none transition-all dark:text-white" placeholder="Ex: Todo Brasil" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Valor Médio Transportado (R$)</label>
+                                    <input value={form.valor} onChange={update('valor')} type="text" className="w-full px-4 py-2 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-[#3b5bdb] focus:border-transparent outline-none transition-all dark:text-white" placeholder="Ex: 150.000" />
+                                </div>
+
+                                <button disabled={isSubmitting} type="submit" className="w-full flex items-center justify-center px-4 py-3 bg-[#3b5bdb] hover:bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:shadow-[#3b5bdb]/30 transition-all duration-300 disabled:opacity-70">
+                                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : "Solicitar Cotação"}
+                                </button>
+
+                                <p className="text-xs text-center text-slate-500 mt-4 flex items-center justify-center">
+                                    <Lock className="w-3 h-3 mr-1" /> Seus dados estão seguros
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer
+                className="bg-[#f8fafc] dark:bg-[#0f172a] border-t border-slate-200 dark:border-slate-800 pt-16 pb-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                        <div className="col-span-1 lg:col-span-1">
+                            <div className="flex items-center space-x-2 mb-6">
+                                <div
+                                    className="w-8 h-8 bg-[#3b5bdb] rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                                    JJ</div>
+                                <span className="font-display font-bold text-lg text-slate-900 dark:text-white">JJ <span
+                                    className="text-[#3b5bdb]">&amp;</span> Amorim</span>
+                            </div>
+                            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                Corretora de seguros especializada em transporte de cargas. Protegendo o que importa há mais de
+                                10 anos.
+                            </p>
+                            <div className="flex space-x-4">
+                                <a className="text-slate-400 hover:text-[#3b5bdb] transition-colors" href="#"><span
+                                    className="material-icons-outlined">facebook</span></a>
+                                <a className="text-slate-400 hover:text-[#3b5bdb] transition-colors" href="#"><span
+                                    className="material-icons-outlined">photo_camera</span></a>
+                                <a className="text-slate-400 hover:text-[#3b5bdb] transition-colors" href="#"><span
+                                    className="material-icons-outlined">business_center</span></a>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4">Seguros
+                            </h3>
+                            <ul className="space-y-3">
+                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Auto
+                                    Frota</a></li>
+                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">RCTR-C</a>
+                                </li>
+                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">RC-DC</a>
+                                </li>
+                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Vida em
+                                    Grupo</a></li>
+                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm"
+                                    href="#">Empresarial</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4">
+                                Institucional</h3>
+                            <ul className="space-y-3">
+                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Sobre
+                                    Nós</a></li>
+                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Política
+                                    de Privacidade</a></li>
+                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Termos de
+                                    Uso</a></li>
+                                <li><a className="text-slate-500 dark:text-slate-400 hover:text-[#3b5bdb] text-sm" href="#">Trabalhe
+                                    Conosco</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4">Contato
+                            </h3>
+                            <ul className="space-y-3">
+                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm">
+                                    <Phone className="w-5 h-5" />
+                                    (11) 3493-3605
+                                </li>
+                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm">
+                                    <MessageCircle className="w-5 h-5" />
+                                    (11) 97969-9832
+                                </li>
+                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm">
+                                    <Mail className="w-5 h-5" />
+                                    contato@jjamorimseguros.com.br
+                                </li>
+                                <li className="flex items-start text-slate-500 dark:text-slate-400 text-sm">
+                                    <MapPin className="w-5 h-5" />
+                                    R. Frei Gaspar, 941 - Sala 603<br />São Bernardo do Campo - SP
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div
+                        className="border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                        <p className="text-slate-400 text-xs mb-4 md:mb-0">
+                            © 2024 JJ &amp; Amorim Corretora de Seguros. Todos os direitos reservados. CNPJ: 21.364.352/0001-04
+                        </p>
+                        <div className="flex items-center space-x-2 text-slate-400 text-xs">
+                            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                            <span>Site Seguro SSL</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    );
 }
