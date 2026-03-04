@@ -1,49 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
+    --background: 226 60% 10%; /* #0A1128 Deep Ocean */
+    --foreground: 210 40% 98%; /* Ice White */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card: 215 28% 11%; /* #111827 Slate Navy */
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover: 215 28% 11%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 238 41% 41%;
+    --primary: 221 83% 53%; /* #2563EB Royal Blue */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%; /* Subtext */
 
-    --accent: 263 84% 58%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 43 65% 53%; /* #D4AF37 Trust Gold / Amber */
+    --accent-foreground: 226 60% 10%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 238 41% 41%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 221 83% 53%;
 
-    --radius: 0.75rem;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217 91% 60%;
+    --radius: 2rem; /* ANTIGRAVITY Global Rule for roundedness */
   }
 }
 
@@ -58,173 +48,48 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: "Inter", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* ── Stripe/Apple-style animations ── */
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ANTIGRAVITY Micro-Interactions */
+.magnetic-btn {
+  @apply relative overflow-hidden transition-all duration-300;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.magnetic-btn:hover {
+  transform: scale(1.03);
+}
+.magnetic-btn::before {
+  content: '';
+  @apply absolute inset-0 bg-white/10 translate-y-full transition-transform duration-300;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.magnetic-btn:hover::before {
+  @apply translate-y-0;
 }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+.hover-lift {
+  @apply transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-lg;
 }
 
-.animate-fade-up {
-  animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.6s ease forwards;
-}
-
-/* Staggered children */
-.stagger>*:nth-child(1) {
-  animation-delay: 0ms;
-}
-
-.stagger>*:nth-child(2) {
-  animation-delay: 80ms;
-}
-
-.stagger>*:nth-child(3) {
-  animation-delay: 160ms;
-}
-
-.stagger>*:nth-child(4) {
-  animation-delay: 240ms;
-}
-
-.stagger>*:nth-child(5) {
-  animation-delay: 320ms;
-}
-
-.stagger>*:nth-child(6) {
-  animation-delay: 400ms;
-}
-
-.stagger>*:nth-child(7) {
-  animation-delay: 480ms;
-}
-
-.stagger>*:nth-child(8) {
-  animation-delay: 560ms;
-}
-
-/* Scroll-triggered reveal */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Subtle gradient text */
-.gradient-text {
-  background: linear-gradient(135deg, #3E4095 0%, #7C3AED 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Trust bar marquee */
-.marquee-track {
-  display: flex;
-  gap: 3rem;
-  animation: marquee 30s linear infinite;
-  will-change: transform;
-}
-
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-/* Minimal CTA button — Stripe-style */
-.btn-primary {
-  background: #3E4095;
-  color: white;
-  transition: all 0.2s ease;
-}
-
-.btn-primary:hover {
-  background: #353789;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(62, 64, 149, 0.25);
-}
-
-.btn-outline {
-  border: 1.5px solid #e2e8f0;
-  color: #1e293b;
-  transition: all 0.2s ease;
-}
-
-.btn-outline:hover {
-  border-color: #3E4095;
-  color: #3E4095;
-  background: rgba(62, 64, 149, 0.04);
-}
-
-/* WhatsApp floating */
-.whatsapp-float {
+/* Noise overlay */
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  pointer-events: none;
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  inset: 0;
   z-index: 50;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: #25D366;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 12px rgba(37, 211, 102, 0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.whatsapp-float:hover {
-  transform: scale(1.08);
-  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+/* Typography Classes */
+.font-drama {
+  font-family: "Playfair Display", serif;
 }
-
-@media (max-width: 768px) {
-  .whatsapp-float {
-    bottom: 80px;
-    right: 16px;
-    width: 48px;
-    height: 48px;
-  }
-}
-
-/* Divider line — Apple style */
-.section-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+.font-mono {
+  font-family: "JetBrains Mono", monospace;
 }
