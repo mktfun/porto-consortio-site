@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 export function Hero() {
   const container = useRef<HTMLDivElement>(null);
-  
+
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -20,11 +20,11 @@ export function Hero() {
     <section ref={container} className="relative min-h-screen flex items-end pb-16 md:pb-24 lg:pb-32 overflow-hidden bg-background">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1494412651409-8963ce7935a7?q=80&w=2070&auto=format&fit=crop" 
-          alt="Port and containers at twilight" 
-          className="w-full h-full object-cover scale-105"
-        />
+        <img
+          src="https://images.unsplash.com/photo-1494412651409-8963ce7935a7?q=80&w=2070&auto=format&fit=crop"
+          alt="Port and containers at twilight"
+          className="w-full h-full object-cover scale-105" />
+        
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/75 to-background/20"></div>
       </div>
@@ -44,8 +44,8 @@ export function Hero() {
               <span className="block font-drama italic text-accent">Precisão Absoluta.</span>
             </h1>
             
-            <p className="hero-text text-base md:text-lg lg:text-xl text-slate-400 max-w-2xl font-light leading-relaxed mb-10">
-              A infraestrutura de proteção definitiva para transportadoras e embarcadores. Coberturas massivas. Respostas em milissegundos.
+            <p className="hero-text text-base md:text-lg lg:text-xl text-slate-400 max-w-2xl font-light leading-relaxed mb-10">A infraestrutura de proteção definitiva para transportadoras e embarcadores. Coberturas massivas. 
+
             </p>
             
             <div className="hero-text flex flex-col sm:flex-row gap-4">
@@ -87,6 +87,6 @@ export function Hero() {
 
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
