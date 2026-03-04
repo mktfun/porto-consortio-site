@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Phone, ArrowRight, Menu, X } from "lucide-react";
+import jjamorimLogo from "@/assets/jjamorim-logo.png";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -37,9 +38,7 @@ export function Navbar() {
         <div className="flex items-center justify-between w-full">
           {/* Logo — using text fallback for reliability */}
           <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
-            <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-base shadow-lg shadow-primary/30">
-              JJ
-            </div>
+            <img src={jjamorimLogo} alt="JJ & Amorim Corretora de Seguros" className="h-9 w-auto rounded-lg" />
             <span className="font-bold text-white text-lg tracking-tight">
               JJ <span className="text-primary">& </span>Amorim
             </span>

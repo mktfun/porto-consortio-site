@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Facebook, Instagram, MessageCircle } from "lucide-react";
+import jjamorimLogo from "@/assets/jjamorim-logo.png";
 
 export function Footer() {
   return (
@@ -12,9 +13,7 @@ export function Footer() {
             {/* Brand */}
             <div className="lg:col-span-1">
               <Link to="/" className="flex items-center space-x-3 mb-6">
-                <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-primary/30">
-                  JJ
-                </div>
+                <img src={jjamorimLogo} alt="JJ & Amorim" className="h-9 w-auto rounded-lg" />
                 <span className="font-bold text-white text-lg tracking-tight">
                   JJ <span className="text-primary">&</span> Amorim
                 </span>

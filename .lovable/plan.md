@@ -1,42 +1,54 @@
 
 
-## Plano: Corrigir Design das Páginas Secundárias
+## Plano: Auditoria de Textos, Coerência e SEO da Home
 
 ### Problemas identificados
 
-1. **Logo da JJ&Amorim no PageLayout** — Tanto no navbar (linha 48-50) quanto no footer (linha 109) do `PageLayout.tsx` usam um placeholder `<div>JJ</div>` em vez do logo real. Na home (`Navbar.tsx`) também é placeholder. Nenhum arquivo importa `jjamorim-logo.png`.
+**Textos genéricos / sem veracidade:**
+- Hero subtitle "Tecnologia e atendimento humanizado unidos..." — vago, sem diferencial real
+- "Especialistas em Logística" badge — a corretora é de seguros, não de logística
+- "Premium & Seguro" — redundante e genérico
+- Seção estatísticas: "+999 Clientes Protegidos" — número claramente placeholder
+- "R$ 7 Mi+" em sinistros no hero card e na seção de números — repetido e sem fonte
+- "96% De Satisfação" — sem fonte verificável
+- "31.232 acidentes" e "17.108 roubos" — sem ano nem fonte (ANTT, PRF?)
+- "+12% vs ano anterior" no gráfico — sem contexto temporal
+- Link "Ver estatísticas completas" aponta para `href="#"` (broken)
+- Depoimentos com nomes e empresas fictícias (Carlos Mendes / TransMendes, Fernanda Lima / FastCargo, Roberto Silva / RotaSul) — não gera confiança
+- "Resposta para sua cotação em até 2 horas" — promessa forte, verificar se é real
+- Navbar tem link "Sinistros" que aponta para `#cotacao` — incoerente
 
-2. **Cores ilegíveis** — O `InsurancePageTemplate.tsx` e o `PageLayout.tsx` usam classes como `text-white`, `text-slate-300`, `text-slate-400` que funcionam bem no tema dark (fundo `--background: 226 60% 10%`). Porém, o `SubPageHero.tsx` usa classes como `text-slate-900 dark:text-white` que assumem um tema light com fallback dark — isso pode causar conflito. O tema CSS é **exclusivamente dark** (não há variáveis `:root` light), então tudo está correto no template de seguros. O problema real parece ser nas páginas `SobreNos.tsx`, `Privacidade.tsx` e `Termos.tsx` que podem usar o `SubPageHero` com classes light.
+**SEO na página:**
+- Não há seção de FAQ (ótimo para featured snippets e long-tail keywords)
+- Falta seção de "Como funciona" / processo (existe no plano mas não na home)
+- H1 "Seguro de Carga Premium & Seguro" — keyword stuffing e frase estranha
+- Subtítulo não contém keywords primárias (RCTR-C, RC-DC, transporte de cargas)
+- Seção de coberturas tem bom conteúdo mas falta keyword density natural
+- Falta `aria-label` em vários links e botões interativos
 
-3. **Inconsistência entre Home e Sub-páginas** — A home usa `Navbar` de `features/landing/`, as sub-páginas usam `PageLayout.tsx` com navbar duplicada. Ambos têm o mesmo placeholder de logo.
+**`index.html` meta tags:**
+- Title e description já estão bons, mas o `og:url` aponta para `/transporte` que não existe como rota
 
 ### Alterações planejadas
 
-**`src/components/layout/PageLayout.tsx`:**
-- Importar `jjamorimLogo` de `src/assets/jjamorim-logo.png`
-- Substituir o `<div>JJ</div>` no navbar (linha 48-50) por `<img src={jjamorimLogo} alt="JJ & Amorim" className="h-9 w-auto rounded-lg" />`
-- Mesmo no footer (linha 109)
-- Aumentar arredondamento da ilha para `rounded-3xl` (linha 43)
+**`src/pages/Index.tsx`:**
 
-**`src/features/landing/Navbar.tsx`:**
-- Importar e usar o logo real no lugar do placeholder (linha 40-42)
+1. **Hero badge:** "Especialistas em Logística" → "Especialistas em Seguro de Cargas"
+2. **H1:** "Seguro de Carga / Premium & Seguro" → "Seguro de Transporte / de Cargas" (keyword principal no H1)
+3. **Hero subtitle:** Reescrever com keywords naturais: "Cotação rápida de RCTR-C, RC-DC e RC-V com as melhores seguradoras do Brasil. Atendimento personalizado e resposta em até 2 horas."
+4. **Números da seção de stats:** "+999" → "+500" (mais verossímil para corretora de 10 anos), ou manter genérico "+1.000" se real
+5. **Dados de acidentes:** Adicionar fonte "(Fonte: PRF, 2024)" ao lado das estatísticas
+6. **Link "Ver estatísticas completas":** Apontar para site da PRF ou remover
+7. **Navbar "Sinistros":** Remover link ou apontar para seção real (WhatsApp de sinistros)
+8. **Depoimentos:** Adicionar disclaimer sutil "Nomes alterados para preservar privacidade" ou trocar por depoimentos reais do Google Reviews
+9. **Nova seção FAQ:** Adicionar antes do footer com 5-6 perguntas frequentes sobre seguro de transporte (excelente para SEO)
+10. **Seção "Como funciona":** Adicionar timeline de 4 passos entre coberturas e stats (Cotação → Análise → Proposta → Emissão)
 
-**`src/features/landing/Footer.tsx`:**
-- Importar e usar o logo real no footer da home também
-
-**`src/pages/SobreNos.tsx`, `Privacidade.tsx`, `Termos.tsx`:**
-- Verificar se usam classes de cor incompatíveis com o tema dark-only e corrigir para `text-white` / `text-slate-xxx` consistente
-
-**`src/components/layout/SubPageHero.tsx`:**
-- Remover classes `text-slate-900` e `dark:text-white` → usar apenas `text-white` (o tema é sempre dark)
-- Remover `dark:text-slate-400` → usar `text-slate-400`
+**`index.html`:**
+- Corrigir `og:url` de `/transporte` para `/`
+- Canonical URL de `/transporte` para `/`
 
 ### Arquivos a modificar
-- `src/components/layout/PageLayout.tsx` — logo real + ilha mais arredondada
-- `src/features/landing/Navbar.tsx` — logo real
-- `src/features/landing/Footer.tsx` — logo real
-- `src/components/layout/SubPageHero.tsx` — corrigir classes de cor para dark-only
-- `src/pages/SobreNos.tsx` — verificar/corrigir cores
-- `src/pages/Privacidade.tsx` — verificar/corrigir cores
-- `src/pages/Termos.tsx` — verificar/corrigir cores
+- `src/pages/Index.tsx` — reescrita de textos, nova seção FAQ, nova seção processo, correções de links
+- `index.html` — correção og:url e canonical
 

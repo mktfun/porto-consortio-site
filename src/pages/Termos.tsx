@@ -10,8 +10,8 @@ export default function Termos() {
                 breadcrumbs={[{ label: "Início", href: "/" }, { label: "Termos de Uso" }]}
             />
 
-            <section className="py-16 bg-white dark:bg-[#1e293b]">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 prose dark:prose-invert prose-slate max-w-none">
+            <section className="py-16 bg-card">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-invert prose-slate max-w-none">
                     <h2>1. Aceitação dos Termos</h2>
                     <p>
                         Ao acessar e utilizar este site, você concorda com os presentes Termos de Uso. Caso não concorde, recomendamos que interrompa a navegação.
