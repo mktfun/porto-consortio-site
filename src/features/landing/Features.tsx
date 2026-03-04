@@ -24,8 +24,8 @@ export function Features() {
           scrollTrigger: {
             trigger: ".feature-cards-grid",
             start: "top 85%",
-            once: true,
-          },
+            once: true
+          }
         }
       );
     }, container);
@@ -66,11 +66,11 @@ export function Features() {
                 A espinha dorsal operacional. Cobertura inegociável contra colisões, tombamentos e desastres em trânsito. O seu escudo principal.
               </p>
               <div className="space-y-3">
-                {["Colisão Frontal/Lateral", "Capotamento", "Incêndio/Explosão"].map((item) => (
-                  <div key={item} className="flex items-center gap-3 text-sm font-mono text-slate-500">
+                {["Colisão Frontal/Lateral", "Capotamento", "Incêndio/Explosão"].map((item) =>
+                <div key={item} className="flex items-center gap-3 text-sm font-mono text-slate-500">
                     <div className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0"></div> {item}
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>
@@ -89,7 +89,7 @@ export function Features() {
                   Alto Risco
                 </span>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">RC-DC Stealth</h3>
+              <h3 className="text-2xl font-bold text-white mb-4">RC-DC</h3>
               <p className="text-primary-foreground/80 mb-8 flex-grow">
                 O módulo anti-roubo. Blindagem completa contra o desaparecimento de carga e assaltos armados em zonas vermelhas.
               </p>
@@ -132,6 +132,6 @@ export function Features() {
 
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
