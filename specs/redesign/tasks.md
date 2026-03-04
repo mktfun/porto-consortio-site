@@ -9,6 +9,6 @@
 - [x] 7. Criar bloco de Filosofia/Manifesto.
 - [x] 8. Adicionar Form/CTA massivo de cotação final.
 - [x] 9. Hookar GSAP (ScrollTrigger) globalmente em todas as ref sections.
-- [ ] 10. Garantir responsividade (Stack grid para single column em Mobile).
-- [ ] 11. Teste GSAP (Sem vazamento de memória).
-- [ ] 12. Commit e Push na origin fornecida.
+- [x] 10. Garantir responsividade (Stack grid para single column em Mobile).
+- [x] 11. Teste GSAP (Sem vazamento de memória).
+- [x] 12. Commit e Push na origin fornecida.
