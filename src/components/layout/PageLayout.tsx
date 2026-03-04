@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Phone, Mail, MapPin, MessageCircle, Facebook, Instagram, Menu, X, ArrowRight } from "lucide-react";
 import { useState } from "react";
+import jjamorimLogo from "@/assets/jjamorim-logo.png";
 
 interface PageLayoutProps {
     children: React.ReactNode;
@@ -40,14 +41,12 @@ export default function PageLayout({ children }: PageLayoutProps) {
             {/* NAVBAR */}
             <nav className={`fixed z-40 transition-all duration-500 ease-in-out left-1/2 -translate-x-1/2 ${
                 scrolled
-                    ? "top-4 w-[95%] md:w-[80%] rounded-[2rem] bg-background/80 backdrop-blur-xl border border-white/10 shadow-2xl py-3 px-6"
+                    ? "top-4 w-[95%] md:w-[80%] rounded-3xl bg-background/80 backdrop-blur-xl border border-white/10 shadow-2xl py-3 px-6"
                     : "top-0 md:top-8 w-full px-6 md:px-16 py-4 bg-background/50 backdrop-blur-md border-b border-white/5"
             }`}>
                 <div className="flex items-center justify-between w-full">
                     <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
-                        <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-primary/30">
-                            JJ
-                        </div>
+                        <img src={jjamorimLogo} alt="JJ & Amorim Corretora de Seguros" className="h-9 w-auto rounded-lg" />
                         <span className="font-bold text-white text-lg tracking-tight">
                             JJ <span className="text-primary">&</span> Amorim
                         </span>
@@ -106,7 +105,7 @@ export default function PageLayout({ children }: PageLayoutProps) {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
                         <div className="lg:col-span-1">
                             <Link to="/" className="flex items-center space-x-3 mb-6">
-                                <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-sm">JJ</div>
+                                <img src={jjamorimLogo} alt="JJ & Amorim" className="h-9 w-auto rounded-lg" />
                                 <span className="font-bold text-white text-lg">JJ <span className="text-primary">&</span> Amorim</span>
                             </Link>
                             <p className="text-slate-500 text-sm leading-relaxed mb-6">Corretora especializada em transporte de cargas. Protegendo quem move o Brasil há mais de 10 anos.</p>
