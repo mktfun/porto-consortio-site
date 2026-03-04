@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Success from "./pages/Success";
+import Cotacao from "./pages/Cotacao";
 
 // Institutional pages
 import SobreNos from "./pages/SobreNos";
@@ -30,6 +31,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/cotacao" element={<Cotacao />} />
           <Route path="/sucesso" element={<Success />} />
 
           {/* Institutional */}

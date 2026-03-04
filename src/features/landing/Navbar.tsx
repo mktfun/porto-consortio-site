@@ -65,7 +65,7 @@ export function Navbar() {
               <Phone className="w-4 h-4 mr-2" /> (11) 97969-9832
             </a>
             <a
-              href="/#cotacao"
+              href="/cotacao"
               className="magnetic-btn bg-primary text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-[0_0_20px_-5px_theme(colors.primary.DEFAULT)] inline-flex items-center"
             >
               <span className="relative z-10 flex items-center">
@@ -76,7 +76,7 @@ export function Navbar() {
 
           {/* Mobile: CTA + Hamburger */}
           <div className="flex md:hidden items-center gap-3">
-            <a href="/#cotacao" className="magnetic-btn bg-primary text-white px-4 py-2 rounded-full text-xs font-bold">
+            <a href="/cotacao" className="magnetic-btn bg-primary text-white px-4 py-2 rounded-full text-xs font-bold">
               Cotar
             </a>
             <button
@@ -132,7 +132,7 @@ export function Navbar() {
           </a>
 
           <a
-            href="/#cotacao"
+            href="/cotacao"
             onClick={() => setMenuOpen(false)}
             className="mt-2 w-full flex items-center justify-center px-6 py-4 bg-primary text-white font-bold rounded-2xl text-lg"
           >

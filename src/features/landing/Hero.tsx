@@ -49,7 +49,7 @@ export function Hero() {
             </p>
             
             <div className="hero-text flex flex-col sm:flex-row gap-4">
-              <a href="#cotacao" className="magnetic-btn bg-white text-background px-8 py-4 rounded-full font-bold text-center inline-flex justify-center items-center hover:bg-slate-100 transition-colors">
+              <a href="/cotacao" className="magnetic-btn bg-white text-background px-8 py-4 rounded-full font-bold text-center inline-flex justify-center items-center hover:bg-slate-100 transition-colors">
                 <span className="relative z-10 flex items-center text-sm md:text-base">
                   Iniciar Protocolo de Cotação <ArrowRight className="w-5 h-5 ml-2" />
                 </span>
