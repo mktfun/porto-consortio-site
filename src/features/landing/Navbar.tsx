@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Phone, ArrowRight, Menu, X } from "lucide-react";
-import jjamorimLogo from "@/assets/jjamorim-logo.png";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -21,9 +20,9 @@ export function Navbar() {
   }, [menuOpen]);
 
   const navLinks = [
-    { label: "Especialidades", href: "/#coberturas" },
-    { label: "O Manifesto", href: "/#diferencial" },
-    { label: "A Corretora", href: "/sobre" },
+    { label: "Opções de Consórcio", href: "/#solucoes" },
+    { label: "Vantagens", href: "/#diferencial" },
+    { label: "Dúvidas Frequentes", href: "/#faq" },
   ];
 
   return (
@@ -37,47 +36,45 @@ export function Navbar() {
       >
         <div className="flex items-center justify-between w-full">
           {/* Logo — using text fallback for reliability */}
-          <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
-            <img src={jjamorimLogo} alt="JJ & Amorim Corretora de Seguros" className="h-9 w-auto rounded-lg" />
+          <a href="/" className="flex items-center space-x-3 flex-shrink-0">
             <span className="font-bold text-white text-lg tracking-tight">
               JJ <span className="text-primary">& </span>Amorim
             </span>
-          </Link>
+            <span className="text-[10px] font-mono font-bold text-accent uppercase tracking-widest hidden sm:block">Porto Consórcio</span>
+          </a>
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) =>
-              link.href.startsWith("/") && !link.href.startsWith("/#") ? (
-                <Link key={link.label} to={link.href} className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
-                  {link.label}
-                </Link>
-              ) : (
-                <a key={link.label} href={link.href} className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
-                  {link.label}
-                </a>
-              )
-            )}
+            <a href="#solucoes" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+              Opções de Consórcio
+            </a>
+            <a href="#diferencial" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+              Vantagens
+            </a>
+            <a href="#faq" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+              Dúvidas Frequentes
+            </a>
           </div>
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="tel:+5511979699832" className="hidden lg:flex items-center text-sm font-bold text-slate-300 hover:text-accent transition-colors">
+            <a href="https://wa.me/5511979699832" target="_blank" rel="noreferrer" className="hidden lg:flex items-center text-sm font-bold text-slate-300 hover:text-accent transition-colors">
               <Phone className="w-4 h-4 mr-2" /> (11) 97969-9832
             </a>
             <a
-              href="/cotacao"
+              href="#cotacao"
               className="magnetic-btn bg-primary text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-[0_0_20px_-5px_theme(colors.primary.DEFAULT)] inline-flex items-center"
             >
               <span className="relative z-10 flex items-center">
-                Cotar Agora <ArrowRight className="w-4 h-4 ml-2" />
+                Simular Agora <ArrowRight className="w-4 h-4 ml-2" />
               </span>
             </a>
           </div>
 
           {/* Mobile: CTA + Hamburger */}
           <div className="flex md:hidden items-center gap-3">
-            <a href="/cotacao" className="magnetic-btn bg-primary text-white px-4 py-2 rounded-full text-xs font-bold">
-              Cotar
+            <a href="#cotacao" className="magnetic-btn bg-primary text-white px-4 py-2 rounded-full text-xs font-bold">
+              Simular
             </a>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
@@ -132,11 +129,11 @@ export function Navbar() {
           </a>
 
           <a
-            href="/cotacao"
+            href="#cotacao"
             onClick={() => setMenuOpen(false)}
             className="mt-2 w-full flex items-center justify-center px-6 py-4 bg-primary text-white font-bold rounded-2xl text-lg"
           >
-            Solicitar Cotação Gratuita <ArrowRight className="w-5 h-5 ml-3" />
+            Simular Consórcio <ArrowRight className="w-5 h-5 ml-3" />
           </a>
         </div>
       </div>

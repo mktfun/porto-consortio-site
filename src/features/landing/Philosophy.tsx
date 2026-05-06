@@ -38,14 +38,14 @@ export function Philosophy() {
       <div className="max-w-5xl mx-auto px-6 lg:px-16 text-center relative z-10">
         <div className="mb-12">
           <p className="split-line text-lg text-slate-500 font-mono tracking-widest uppercase mb-6">
-            O Paradigma A.M & Amorim
+            A Confiança Porto Seguro
           </p>
           <p className="split-line text-2xl md:text-3xl font-light text-slate-400 mb-6">
-            A maioria do mercado foca em vender papel.
+            A maioria foca apenas em vender uma carta de crédito.
           </p>
           <h2 className="split-line text-4xl md:text-6xl font-drama italic text-white leading-tight">
-            Nós focamos em transferir de fato <br />
-            o seu <span className="text-accent not-italic font-bold font-sans">risco operacional</span>.
+            Nós focamos em ajudar você a conquistar <br />
+            o seu sonho sem <span className="text-accent not-italic font-bold font-sans">pagar juros</span>.
           </h2>
         </div>
 
@@ -53,13 +53,13 @@ export function Philosophy() {
           <div className="split-line bg-card/50 backdrop-blur-md p-10 rounded-[2rem] border border-white/5">
             <div className="text-accent text-6xl font-drama leading-none mb-4 opacity-50">"</div>
             <p className="text-slate-300 text-lg mb-6 relative z-10">
-              O atendimento faz toda a diferença. Tivemos um sinistro grave e a equipe acompanhou todo o processo junto à seguradora. Resolveram tudo de forma ágil, sem travar nossa operação.
+              O atendimento fez toda a diferença. O especialista acompanhou todo o meu processo de contemplação e documentação junto à Porto Seguro de forma impecável.
             </p>
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold font-mono">CT</div>
               <div>
-                <p className="text-white font-bold">Cliente Transportadora</p>
-                <p className="text-slate-500 text-sm">Operação Rodoviária — SP</p>
+                <p className="text-white font-bold">Carlos Teixeira</p>
+                <p className="text-slate-500 text-sm">Consórcio de Imóvel — SP</p>
               </div>
             </div>
           </div>
@@ -67,13 +67,13 @@ export function Philosophy() {
           <div className="split-line bg-card/50 backdrop-blur-md p-10 rounded-[2rem] border border-white/5">
             <div className="text-primary text-6xl font-drama leading-none mb-4 opacity-50">"</div>
             <p className="text-slate-300 text-lg mb-6 relative z-10">
-              Cotações claras e sem letras miúdas. A corretora conseguiu condições absurdamente melhores do que tínhamos antes, com a mesma cobertura base das gigantes.
+              Eu ia financiar um carro e pagaria quase o dobro. A corretora me explicou exatamente como o consórcio funciona e hoje já estou com meu zero km na garagem.
             </p>
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold font-mono">EI</div>
               <div>
-                <p className="text-white font-bold">Embarcador Industrial</p>
-                <p className="text-slate-500 text-sm">Setor Químico — ABC</p>
+                <p className="text-white font-bold">Eduardo Ignes</p>
+                <p className="text-slate-500 text-sm">Consórcio de Automóvel — ABC</p>
               </div>
             </div>
           </div>

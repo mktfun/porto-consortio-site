@@ -8,29 +8,29 @@ gsap.registerPlugin(ScrollTrigger);
 const steps = [
   {
     num: "01",
-    title: "Análise Telemetria",
-    desc: "Processamos os dados do seu volume de transporte, rotas principais e histórico de sinistralidade.",
+    title: "Análise do Perfil",
+    desc: "Entendemos a sua necessidade de crédito e o valor ideal de parcela para o seu orçamento.",
     icon: Database,
     color: "from-primary/20 to-transparent",
   },
   {
     num: "02",
-    title: "Scrutiny de Mercado",
-    desc: "Nossos corretores auditam as 12 maiores seguradoras do país cruzando taxas vs. condições de franquia.",
+    title: "Busca pelas Melhores Cotas",
+    desc: "Nossos especialistas analisam as cotas da Porto Seguro para encontrar o grupo perfeito para você.",
     icon: ScanSearch,
     color: "from-accent/20 to-transparent",
   },
   {
     num: "03",
-    title: "Proposta Blindada",
-    desc: "Entrega do relatório técnico contendo a melhor configuração de apólice (RCTR-C + adicionais exatos).",
+    title: "Apresentação da Proposta",
+    desc: "Apresentamos as melhores opções de crédito e prazos, de forma clara e transparente.",
     icon: Send,
     color: "from-blue-500/20 to-transparent",
   },
   {
     num: "04",
-    title: "Emissão & Protocolo",
-    desc: "Ativação instantânea da cobertura. Embarque liberado com averbação eletrônica configurada.",
+    title: "Assinatura do Contrato",
+    desc: "Você assina seu contrato 100% online com a segurança da maior seguradora do Brasil.",
     icon: FileCheck,
     color: "from-green-500/20 to-transparent",
   },
@@ -63,12 +63,12 @@ export function Protocol() {
   }, []);
 
   return (
-    <section ref={container} className="py-24 bg-background relative z-10">
+    <section ref={container} className="py-24 bg-background relative z-10" id="faq">
       <div className="max-w-6xl mx-auto px-6 lg:px-16">
         <div className="text-center mb-16">
-          <h2 className="text-base text-accent font-semibold tracking-wide uppercase mb-4 font-mono">Metodologia</h2>
+          <h2 className="text-base text-accent font-semibold tracking-wide uppercase mb-4 font-mono">Como Funciona</h2>
           <p className="text-4xl md:text-5xl font-bold text-white">
-            Ciclo de Operação em 4 Fases.
+            Ciclo Simples em 4 Passos.
           </p>
         </div>
 

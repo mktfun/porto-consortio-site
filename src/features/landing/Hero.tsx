@@ -36,26 +36,26 @@ export function Hero() {
           <div className="max-w-3xl">
             <div className="hero-text inline-flex items-center px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse mr-3"></span>
-              <span className="text-xs font-mono tracking-widest text-slate-300 uppercase">Seguro Logístico Classe A</span>
+              <span className="text-xs font-mono tracking-widest text-slate-300 uppercase">Corretora Especialista Porto Seguro</span>
             </div>
             
             <h1 className="hero-text text-4xl sm:text-5xl md:text-6xl xl:text-[5.5rem] leading-[1.05] tracking-tight text-white mb-6">
-              <span className="block font-bold mb-2">A SEGURANÇA LOGÍSTICA ENCONTRA A</span>
-              <span className="block font-drama italic text-accent">Precisão Absoluta.</span>
+              <span className="block font-bold mb-2">A REALIZAÇÃO DO SEU SONHO SEM</span>
+              <span className="block font-drama italic text-accent">Pagar Juros.</span>
             </h1>
             
-            <p className="hero-text text-base md:text-lg lg:text-xl text-slate-400 max-w-2xl font-light leading-relaxed mb-10">A infraestrutura de proteção definitiva para transportadoras e embarcadores. Coberturas massivas. 
-
+            <p className="hero-text text-base md:text-lg lg:text-xl text-slate-400 max-w-2xl font-light leading-relaxed mb-10">
+              Compre seu imóvel, carro ou caminhão sem pagar juros abusivos de financiamento. Parcelas que cabem no seu bolso com a segurança da maior seguradora do país.
             </p>
             
             <div className="hero-text flex flex-col sm:flex-row gap-4">
-              <a href="/cotacao" className="magnetic-btn bg-white text-background px-8 py-4 rounded-full font-bold text-center inline-flex justify-center items-center hover:bg-slate-100 transition-colors">
+              <a href="#cotacao" className="magnetic-btn bg-white text-background px-8 py-4 rounded-full font-bold text-center inline-flex justify-center items-center hover:bg-slate-100 transition-colors">
                 <span className="relative z-10 flex items-center text-sm md:text-base">
-                  Iniciar Protocolo de Cotação <ArrowRight className="w-5 h-5 ml-2" />
+                  Fazer Simulação Online <ArrowRight className="w-5 h-5 ml-2" />
                 </span>
               </a>
               <a href="#diferencial" className="px-8 py-4 rounded-full font-semibold text-white border border-white/20 hover:bg-white/5 transition-colors text-center text-sm md:text-base">
-                Compreender os Riscos
+                Entender o Consórcio
               </a>
             </div>
           </div>
@@ -63,8 +63,8 @@ export function Hero() {
           {/* Stats — visible only on large screens */}
           <div className="hero-text hidden lg:flex flex-col gap-6 text-right pb-4 flex-shrink-0">
             <div>
-              <p className="text-4xl font-drama text-white">R$ 5B+</p>
-              <p className="text-sm font-mono tracking-widest text-slate-500 mt-1 uppercase">Em Cargas Seguradas</p>
+              <p className="text-4xl font-drama text-white">100%</p>
+              <p className="text-sm font-mono tracking-widest text-slate-500 mt-1 uppercase">Segurança Garantida</p>
             </div>
             <div>
               <p className="text-4xl font-drama text-white">24/7</p>
@@ -75,8 +75,8 @@ export function Hero() {
           {/* Stats — only visible on mobile/tablet as a horizontal row */}
           <div className="hero-text flex lg:hidden items-center gap-8">
             <div>
-              <p className="text-3xl font-bold text-white">R$ 5B+</p>
-              <p className="text-xs font-mono tracking-widest text-slate-500 mt-1 uppercase">Cargas Seguradas</p>
+              <p className="text-3xl font-bold text-white">100%</p>
+              <p className="text-xs font-mono tracking-widest text-slate-500 mt-1 uppercase">Segurança</p>
             </div>
             <div className="w-px h-10 bg-white/10"></div>
             <div>

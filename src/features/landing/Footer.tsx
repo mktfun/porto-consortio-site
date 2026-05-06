@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Facebook, Instagram, MessageCircle } from "lucide-react";
-import jjamorimLogo from "@/assets/jjamorim-logo.png";
 
 export function Footer() {
   return (
@@ -12,14 +11,13 @@ export function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             {/* Brand */}
             <div className="lg:col-span-1">
-              <Link to="/" className="flex items-center space-x-3 mb-6">
-                <img src={jjamorimLogo} alt="JJ & Amorim" className="h-9 w-auto rounded-lg" />
+              <a href="/" className="flex items-center space-x-3 mb-6">
                 <span className="font-bold text-white text-lg tracking-tight">
                   JJ <span className="text-primary">&</span> Amorim
                 </span>
-              </Link>
+              </a>
               <p className="text-slate-500 text-sm leading-relaxed mb-6">
-                Corretora especializada em transporte de cargas. Protegendo quem move o Brasil há mais de 10 anos.
+                Corretora especialista Porto Seguro. Ajudando brasileiros a conquistarem seus sonhos sem pagar juros há mais de 10 anos.
               </p>
               <div className="flex gap-4">
                 <a href="https://www.facebook.com/jjamorimseguros" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
@@ -34,19 +32,17 @@ export function Footer() {
               {/* System badge */}
               <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 rounded-full mt-6">
                 <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                <span className="font-mono text-xs uppercase tracking-widest text-slate-400">Sistema Online</span>
+                <span className="font-mono text-xs uppercase tracking-widest text-slate-400">Atendimento Digital</span>
               </div>
             </div>
 
             {/* Seguros */}
             <div>
-              <h4 className="text-white font-bold mb-5 font-mono text-xs uppercase tracking-widest">Blindagens</h4>
+              <h4 className="text-white font-bold mb-5 font-mono text-xs uppercase tracking-widest">Consórcios</h4>
               <ul className="space-y-3">
-                <li><Link to="/seguros/rctr-c" className="text-slate-500 hover:text-white text-sm transition-colors">RCTR-C</Link></li>
-                <li><Link to="/seguros/rc-dc" className="text-slate-500 hover:text-white text-sm transition-colors">RC-DC (Anti-roubo)</Link></li>
-                <li><Link to="/seguros/auto-frota" className="text-slate-500 hover:text-white text-sm transition-colors">Auto Frota</Link></li>
-                <li><Link to="/seguros/vida-em-grupo" className="text-slate-500 hover:text-white text-sm transition-colors">Vida em Grupo</Link></li>
-                <li><Link to="/seguros/empresarial" className="text-slate-500 hover:text-white text-sm transition-colors">Empresarial</Link></li>
+                <li><a href="#solucoes" className="text-slate-500 hover:text-white text-sm transition-colors">Consórcio de Imóveis</a></li>
+                <li><a href="#solucoes" className="text-slate-500 hover:text-white text-sm transition-colors">Consórcio de Automóveis</a></li>
+                <li><a href="#solucoes" className="text-slate-500 hover:text-white text-sm transition-colors">Veículos Pesados</a></li>
               </ul>
             </div>
 
