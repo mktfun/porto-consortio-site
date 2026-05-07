@@ -21,21 +21,21 @@ const menuData = [
   {
     title: "Outros Consórcios",
     items: [
-      { icon: <Sprout className="w-5 h-5 text-secondary" />, title: "Agro", href: "/consorcio/pesados" },
-      { icon: <TrendingUp className="w-5 h-5 text-secondary" />, title: "Investimento", href: "/consorcio/imoveis" },
+      { icon: <Sprout className="w-5 h-5 text-secondary" />, title: "Agro", href: "/consorcio/agro" },
+      { icon: <TrendingUp className="w-5 h-5 text-secondary" />, title: "Investimento", href: "/consorcio/investimento" },
       { icon: <Sun className="w-5 h-5 text-secondary" />, title: "Placa Solar", href: "/consorcio/solar" },
-      { icon: <Briefcase className="w-5 h-5 text-secondary" />, title: "Empresarial", href: "/consorcio/imoveis" },
+      { icon: <Briefcase className="w-5 h-5 text-secondary" />, title: "Empresarial", href: "/consorcio/empresarial" },
     ]
   },
   {
     title: "A Corretora",
     items: [
-      { icon: <Info className="w-5 h-5 text-secondary" />, title: "Sobre Nós", href: "#" },
-      { icon: <Heart className="w-5 h-5 text-secondary" />, title: "Nossa Cultura", href: "#" },
-      { icon: <Users className="w-5 h-5 text-secondary" />, title: "Nossos Clientes", href: "#" },
-      { icon: <Briefcase className="w-5 h-5 text-secondary" />, title: "Trabalhe Conosco", href: "#" },
-      { icon: <Phone className="w-5 h-5 text-secondary" />, title: "Contato", href: "#" },
-      { icon: <BookOpen className="w-5 h-5 text-secondary" />, title: "Artigos sobre Consórcio", href: "#" },
+      { icon: <Info className="w-5 h-5 text-secondary" />, title: "Sobre Nós", href: "/institucional/sobre-nos" },
+      { icon: <Heart className="w-5 h-5 text-secondary" />, title: "Nossa Cultura", href: "/institucional/cultura" },
+      { icon: <Users className="w-5 h-5 text-secondary" />, title: "Nossos Clientes", href: "/institucional/clientes" },
+      { icon: <Briefcase className="w-5 h-5 text-secondary" />, title: "Trabalhe Conosco", href: "/institucional/trabalhe-conosco" },
+      { icon: <Phone className="w-5 h-5 text-secondary" />, title: "Contato", href: "/institucional/contato" },
+      { icon: <BookOpen className="w-5 h-5 text-secondary" />, title: "Artigos sobre Consórcio", href: "/institucional/artigos" },
     ]
   }
 ];

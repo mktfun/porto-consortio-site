@@ -35,20 +35,18 @@ export function Simulator() {
 
   return (
     <section id="simulador" className="py-20 lg:py-32 relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0 bg-slate-50 z-0 overflow-hidden">
-        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/50 blur-[120px]"></div>
-        <div className="absolute top-[40%] -right-[10%] w-[40%] h-[60%] rounded-full bg-blue-50/50 blur-[100px]"></div>
-      </div>
+      {/* Background with abstract wave */}
+      <div className="absolute inset-0 bg-slate-50 z-0"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-[600px] bg-primary rounded-t-[100%] scale-150 origin-bottom translate-y-[30%] z-0"></div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6">
         
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center p-3 bg-secondary/10 rounded-full mb-4">
-            <Calculator className="w-8 h-8 text-secondary" />
+        <div className="text-center mb-12 relative z-10">
+          <div className="inline-flex items-center justify-center p-3 bg-white/10 rounded-full mb-4">
+            <Calculator className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-4">Simulador de Consórcio</h2>
-          <p className="text-slate-600 max-w-2xl mx-auto text-lg">Descubra agora mesmo o quanto você pode economizar fugindo dos juros do financiamento tradicional.</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Simulador de Consórcio</h2>
+          <p className="text-blue-100 max-w-2xl mx-auto text-lg">Descubra agora mesmo o quanto você pode economizar fugindo dos juros do financiamento tradicional.</p>
         </div>
 
         {/* Simulador Card */}
@@ -90,7 +88,7 @@ export function Simulator() {
                   onChange={(e) => setValue(Number(e.target.value))}
                   className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-secondary"
                 />
-                <div className="flex justify-between mt-2 text-xs text-slate-400 font-medium">
+                <div className="flex justify-between mt-2 text-xs text-slate-600 font-bold">
                   <span>{formatCurrency(minCredit)}</span>
                   <span>{formatCurrency(maxCredit)}</span>
                 </div>

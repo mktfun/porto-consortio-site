@@ -9,16 +9,24 @@ import NotFound from "./pages/NotFound";
 import Success from "./pages/Success";
 import Cotacao from "./pages/Cotacao";
 
-// Institutional pages
-import SobreNos from "./pages/SobreNos";
-import Privacidade from "./pages/Privacidade";
-import Termos from "./pages/Termos";
-
 // Consórcio Pages
 import Imoveis from "./pages/consorcio/Imoveis";
 import Automoveis from "./pages/consorcio/Automoveis";
 import Pesados from "./pages/consorcio/Pesados";
 import Solar from "./pages/consorcio/Solar";
+import Agro from "./pages/consorcio/Agro";
+import Investimento from "./pages/consorcio/Investimento";
+import Empresarial from "./pages/consorcio/Empresarial";
+
+// Institutional pages
+import SobreNos from "./pages/institucional/SobreNos";
+import Cultura from "./pages/institucional/Cultura";
+import Clientes from "./pages/institucional/Clientes";
+import TrabalheConosco from "./pages/institucional/TrabalheConosco";
+import Contato from "./pages/institucional/Contato";
+import Artigos from "./pages/institucional/Artigos";
+import Privacidade from "./pages/Privacidade";
+import Termos from "./pages/Termos";
 
 // Insurance pages
 import AutoFrota from "./pages/seguros/AutoFrota";
@@ -57,6 +65,17 @@ const App = () => (
           <Route path="/consorcio/automoveis" element={<Automoveis />} />
           <Route path="/consorcio/pesados" element={<Pesados />} />
           <Route path="/consorcio/solar" element={<Solar />} />
+          <Route path="/consorcio/agro" element={<Agro />} />
+          <Route path="/consorcio/investimento" element={<Investimento />} />
+          <Route path="/consorcio/empresarial" element={<Empresarial />} />
+
+          {/* Institucional */}
+          <Route path="/institucional/sobre-nos" element={<SobreNos />} />
+          <Route path="/institucional/cultura" element={<Cultura />} />
+          <Route path="/institucional/clientes" element={<Clientes />} />
+          <Route path="/institucional/trabalhe-conosco" element={<TrabalheConosco />} />
+          <Route path="/institucional/contato" element={<Contato />} />
+          <Route path="/institucional/artigos" element={<Artigos />} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
