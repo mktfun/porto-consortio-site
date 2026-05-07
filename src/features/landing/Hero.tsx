@@ -26,6 +26,12 @@ export function Hero() {
     <section ref={container} className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-primary">
       {/* Background patterns */}
       <div className="absolute inset-0 z-0 overflow-hidden">
+        {/* Premium background image */}
+        <img 
+          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop" 
+          alt="Mansão moderna" 
+          className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay"
+        />
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-secondary/30 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#002b5c]/50 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4"></div>
       </div>
