@@ -1,10 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Calculator } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export function Simulator() {
   const [type, setType] = useState<"imovel" | "automovel">("imovel");
   const [mode, setMode] = useState<"credito" | "parcela">("credito");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   // Imóvel: crédito de 100k a 1M
   // Automóvel: crédito de 50k a 300k
@@ -15,13 +23,11 @@ export function Simulator() {
   const [value, setValue] = useState(type === "imovel" ? 300000 : 100000);
 
   // Calcula valores simulados
-  // No consórcio a parcela é aprox (Crédito + Taxa Adm) / prazo
-  // Vamos simplificar e usar uma regra visual para impacto:
   const prazo = type === "imovel" ? 200 : 80;
   const taxaAdm = 0.15; // 15% taxa total
   const parcelaConsorcio = (value * (1 + taxaAdm)) / prazo;
   
-  // Financiamento seria muito mais caro (juros compostos)
+  // Financiamento seria muito mais caro
   const parcelaFinanciamento = (value * 2) / prazo; 
   const economia = (parcelaFinanciamento - parcelaConsorcio) * prazo;
 
@@ -36,7 +42,6 @@ export function Simulator() {
 
   const containerRef = useRef<HTMLElement>(null);
   
-  // Anima do momento que entra na tela até encostar no topo
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "start start"]
@@ -47,14 +52,14 @@ export function Simulator() {
   const y = useTransform(scrollYProgress, [0, 1], ["20%", "0%"]);
 
   return (
-    <section ref={containerRef} id="simulador" className="h-[200vh] -mb-[100vh] relative bg-slate-50">
-      <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
+    <section ref={containerRef} id="simulador" className="md:h-[200vh] md:-mb-[100vh] relative bg-slate-50">
+      <div className="md:sticky top-0 md:h-screen w-full flex flex-col justify-center overflow-hidden py-20 md:py-0">
       {/* Background elements */}
       <div className="absolute inset-0 bg-slate-50 z-0"></div>
       
       <motion.div 
-        style={{ borderRadius, scale, y }}
-        className="absolute bottom-0 left-[-10%] right-[-10%] h-[120%] bg-primary origin-bottom z-0 overflow-hidden shadow-2xl" 
+        style={isMobile ? {} : { borderRadius, scale, y }}
+        className={`absolute z-0 overflow-hidden shadow-2xl bg-primary ${isMobile ? 'inset-0' : 'bottom-0 left-[-10%] right-[-10%] h-[120%] origin-bottom'}`} 
       >
         {/* Premium background image */}
         <img 
@@ -65,14 +70,14 @@ export function Simulator() {
         <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
       </motion.div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 w-full pt-10">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 w-full pt-4 md:pt-10">
         
-        <div className="text-center mb-12 relative z-10">
+        <div className="text-center mb-8 md:mb-12 relative z-10">
           <div className="inline-flex items-center justify-center p-3 bg-white/10 backdrop-blur-sm rounded-full mb-4">
-            <Calculator className="w-8 h-8 text-white" />
+            <Calculator className="w-6 h-6 md:w-8 md:h-8 text-white" />
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Simulador de Consórcio</h2>
-          <p className="text-blue-100 max-w-2xl mx-auto text-lg">Descubra agora mesmo o quanto você pode economizar fugindo dos juros do financiamento tradicional.</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3 md:mb-4">Simulador de Consórcio</h2>
+          <p className="text-blue-100 max-w-2xl mx-auto text-base md:text-lg">Descubra agora mesmo o quanto você pode economizar fugindo dos juros do financiamento tradicional.</p>
         </div>
 
         {/* Simulador Card */}
@@ -100,9 +105,9 @@ export function Simulator() {
 
               {/* Slider Area */}
               <div>
-                <div className="flex justify-between items-end mb-4">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-1 sm:gap-2 mb-4">
                   <label className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Valor do Crédito</label>
-                  <span className="text-3xl font-bold text-primary">{formatCurrency(value)}</span>
+                  <span className="text-3xl sm:text-4xl font-bold text-primary">{formatCurrency(value)}</span>
                 </div>
                 
                 <input 
@@ -123,7 +128,7 @@ export function Simulator() {
             </div>
 
             {/* Resultados */}
-            <div className="lg:w-[45%] bg-gradient-to-br from-primary to-[#001838] rounded-[1.5rem] p-8 text-white shadow-2xl shadow-primary/20 flex flex-col justify-center relative overflow-hidden">
+            <div className="lg:w-[45%] bg-gradient-to-br from-primary to-[#001838] rounded-[1.5rem] p-6 sm:p-8 text-white shadow-2xl shadow-primary/20 flex flex-col justify-center relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
               
               <div className="mb-6 relative z-10">
