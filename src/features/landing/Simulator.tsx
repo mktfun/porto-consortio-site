@@ -35,9 +35,11 @@ export function Simulator() {
 
   return (
     <section id="simulador" className="py-20 lg:py-32 relative overflow-hidden">
-      {/* Background with abstract wave */}
-      <div className="absolute inset-0 bg-slate-50 z-0"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-[600px] bg-primary rounded-t-[100%] scale-150 origin-bottom translate-y-[30%] z-0"></div>
+      {/* Background elements */}
+      <div className="absolute inset-0 bg-slate-50 z-0 overflow-hidden">
+        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/50 blur-[120px]"></div>
+        <div className="absolute top-[40%] -right-[10%] w-[40%] h-[60%] rounded-full bg-blue-50/50 blur-[100px]"></div>
+      </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6">
         
@@ -49,8 +51,8 @@ export function Simulator() {
           <p className="text-slate-600 max-w-2xl mx-auto text-lg">Descubra agora mesmo o quanto você pode economizar fugindo dos juros do financiamento tradicional.</p>
         </div>
 
-        {/* Simulador Glass Card */}
-        <div className="glass w-full rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 md:p-10 mx-auto max-w-4xl relative shadow-2xl">
+        {/* Simulador Card */}
+        <div className="bg-white w-full rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 md:p-10 mx-auto max-w-4xl relative shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-slate-100">
           
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
             {/* Controles */}
