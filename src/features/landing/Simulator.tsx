@@ -50,11 +50,11 @@ export function Simulator() {
         </div>
 
         {/* Simulador Glass Card */}
-        <div className="glass w-full rounded-[2.5rem] p-6 md:p-10 mx-auto max-w-4xl relative shadow-2xl">
+        <div className="glass w-full rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 md:p-10 mx-auto max-w-4xl relative shadow-2xl">
           
-          <div className="flex flex-col lg:flex-row gap-10">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
             {/* Controles */}
-            <div className="flex-1 space-y-8">
+            <div className="flex-1 space-y-6 sm:space-y-8">
               
               {/* Type Toggle */}
               <div className="flex p-1 bg-slate-100 rounded-full">
@@ -97,20 +97,20 @@ export function Simulator() {
             </div>
 
             {/* Resultados */}
-            <div className="lg:w-[40%] bg-primary rounded-3xl p-8 text-white shadow-inner flex flex-col justify-center">
+            <div className="lg:w-[40%] bg-primary rounded-3xl p-6 sm:p-8 text-white shadow-inner flex flex-col justify-center">
               <div className="mb-6">
-                <p className="text-blue-200 text-sm mb-1 uppercase tracking-wider font-semibold">Parcelas a partir de</p>
-                <p className="text-4xl font-bold text-white mb-2">{formatCurrency(parcelaConsorcio)}<span className="text-xl font-normal text-blue-200">/mês</span></p>
+                <p className="text-blue-200 text-xs sm:text-sm mb-1 uppercase tracking-wider font-semibold">Parcelas a partir de</p>
+                <p className="text-3xl sm:text-4xl font-bold text-white mb-2">{formatCurrency(parcelaConsorcio)}<span className="text-lg sm:text-xl font-normal text-blue-200">/mês</span></p>
                 <p className="text-xs text-blue-200/70">Prazo estimado: {prazo} meses</p>
               </div>
 
-              <div className="pt-6 border-t border-white/10 mb-8">
-                <p className="text-blue-200 text-sm mb-1">Economia em relação ao financiamento:</p>
-                <p className="text-2xl font-bold text-secondary">{formatCurrency(economia)}</p>
+              <div className="pt-6 border-t border-white/10 mb-6 sm:mb-8">
+                <p className="text-blue-200 text-xs sm:text-sm mb-1">Economia em relação ao financiamento:</p>
+                <p className="text-xl sm:text-2xl font-bold text-secondary">{formatCurrency(economia)}</p>
               </div>
 
-              <a href="#cotacao" className="w-full bg-secondary hover:bg-secondary/90 text-white py-4 rounded-xl font-bold text-center transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-300">
-                Receber Proposta Completa
+              <a href="#cotacao" className="w-full bg-secondary hover:bg-secondary/90 text-white py-3 sm:py-4 rounded-xl font-bold text-center transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-300 text-sm sm:text-base">
+                Receber Proposta
               </a>
             </div>
           </div>

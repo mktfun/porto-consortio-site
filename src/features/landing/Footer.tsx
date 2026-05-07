@@ -4,9 +4,9 @@ import { Phone, Mail, MapPin, Facebook, Instagram, MessageCircle } from "lucide-
 
 export function Footer() {
   return (
-    <footer className="bg-background pt-16 pb-8 z-20 relative">
+    <footer className="bg-slate-50 pt-16 pb-8 z-20 relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
-        <div className="bg-card rounded-t-[3rem] px-8 py-16 md:px-16 border border-white/5 border-b-0 shadow-2xl">
+        <div className="bg-primary rounded-t-[3rem] px-8 py-16 md:px-16 shadow-2xl">
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             {/* Brand */}

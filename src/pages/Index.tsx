@@ -1,7 +1,6 @@
 import React from "react";
 import { Navbar } from "@/features/landing/Navbar";
 import { Hero } from "@/features/landing/Hero";
-import { Features } from "@/features/landing/Features";
 import { Products } from "@/features/landing/Products";
 import { Simulator } from "@/features/landing/Simulator";
 import { Advantages } from "@/features/landing/Advantages";
@@ -19,7 +18,6 @@ export default function Index() {
       <Products />
       <Simulator />
       <Advantages />
-      <Features />
       <LeadForm />
       <Footer />
 

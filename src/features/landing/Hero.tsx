@@ -48,8 +48,8 @@ export function Hero() {
               Carro, moto, imóvel ou energia solar. Sem pagar juros abusivos, com parcelas que cabem no seu bolso e a segurança da Porto Seguro.
             </p>
             
-            <div className="hero-element flex flex-col sm:flex-row gap-4">
-              <a href="#simulador" className="magnetic-btn bg-white text-primary px-8 py-4 rounded-full font-bold text-center inline-flex justify-center items-center hover:bg-gray-50 transition-colors shadow-xl">
+            <div className="hero-element flex flex-col sm:flex-row gap-4 w-full">
+              <a href="#simulador" className="magnetic-btn bg-white text-primary px-8 py-4 rounded-full font-bold text-center inline-flex justify-center items-center hover:bg-gray-50 transition-colors shadow-xl w-full sm:w-auto">
                 Simular Agora <ArrowRight className="w-5 h-5 ml-2" />
               </a>
             </div>
@@ -67,9 +67,9 @@ export function Hero() {
           </div>
 
           {/* Visual Elements (Floating Cards) */}
-          <div className="w-full lg:w-1/2 relative min-h-[400px] hidden md:block">
+          <div className="w-full lg:w-1/2 relative min-h-[400px]">
             {/* Main glass card */}
-            <div className="hero-element glass absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm rounded-[2rem] p-8 z-10">
+            <div className="hero-element glass absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[320px] sm:max-w-sm rounded-[2rem] p-6 sm:p-8 z-10">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-primary text-xl">Simulação de Imóvel</h3>
                 <div className="bg-primary/10 text-primary text-xs px-2 py-1 rounded font-semibold">Porto Seguro</div>
@@ -89,7 +89,7 @@ export function Hero() {
             </div>
 
             {/* Floating decorator card 1 */}
-            <div className="hero-element floating-card glass-dark absolute top-0 right-10 rounded-2xl p-4 flex items-center gap-4 z-20">
+            <div className="hero-element floating-card glass-dark absolute -top-4 right-0 lg:top-0 lg:right-10 rounded-2xl p-4 flex items-center gap-4 z-20 scale-90 sm:scale-100 origin-right">
               <div className="bg-white/20 p-2 rounded-full">
                 <Clock className="w-6 h-6 text-white" />
               </div>
@@ -100,7 +100,7 @@ export function Hero() {
             </div>
             
             {/* Floating decorator card 2 */}
-            <div className="hero-element floating-card glass-dark absolute bottom-10 left-0 rounded-2xl p-4 flex items-center gap-4 z-20" style={{ animationDelay: '1.5s' }}>
+            <div className="hero-element floating-card glass-dark absolute -bottom-4 left-0 lg:bottom-10 lg:left-0 rounded-2xl p-4 flex items-center gap-4 z-20 scale-90 sm:scale-100 origin-left" style={{ animationDelay: '1.5s' }}>
               <div className="bg-white/20 p-2 rounded-full">
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
