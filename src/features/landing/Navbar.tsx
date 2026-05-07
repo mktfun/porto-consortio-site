@@ -56,9 +56,9 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         
         {/* Logo */}
-        <div className="flex items-center gap-2 z-50">
+        <a href="/" className="flex items-center gap-2 z-50">
           <img src="/logo.png" alt="Portal Porto Consórcio" className="h-10 md:h-12 object-contain" />
-        </div>
+        </a>
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
