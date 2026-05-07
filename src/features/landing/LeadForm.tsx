@@ -38,8 +38,8 @@ export function LeadForm() {
   };
 
   return (
-    <section id="cotacao" className="py-24 bg-slate-50 relative z-20">
-      <div className="max-w-6xl mx-auto px-6 lg:px-16">
+    <section id="cotacao" className="py-20 bg-white relative z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-16">
         <div className="bg-primary rounded-[3rem] p-8 md:p-16 relative overflow-hidden shadow-2xl shadow-primary/20">
           
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-secondary/20 to-transparent pointer-events-none"></div>

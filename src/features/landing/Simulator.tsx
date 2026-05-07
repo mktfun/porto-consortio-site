@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Calculator } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 export function Simulator() {
   const [type, setType] = useState<"imovel" | "automovel">("imovel");
@@ -33,13 +34,28 @@ export function Simulator() {
     setValue(newType === "imovel" ? 300000 : 100000);
   };
 
-  return (
-    <section id="simulador" className="py-20 lg:py-32 relative overflow-hidden">
-      {/* Background with abstract wave */}
-      <div className="absolute inset-0 bg-slate-50 z-0"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-[600px] bg-primary rounded-t-[100%] scale-150 origin-bottom translate-y-[30%] z-0"></div>
+  const containerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end start"]
+  });
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6">
+  const borderRadius = useTransform(scrollYProgress, [0, 0.4], ["100%", "0%"]);
+  const scale = useTransform(scrollYProgress, [0, 0.4], [1.5, 1]);
+  const y = useTransform(scrollYProgress, [0, 0.4], ["30%", "0%"]);
+
+  return (
+    <section ref={containerRef} id="simulador" className="h-[150vh] relative bg-slate-50">
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute inset-0 bg-slate-50 z-0"></div>
+      
+      <motion.div 
+        style={{ borderRadius, scale, y }}
+        className="absolute bottom-0 left-0 right-0 h-[800px] bg-primary origin-bottom z-0" 
+      />
+
+      <div className="relative z-10 max-w-5xl mx-auto px-6 w-full pt-10">
         
         <div className="text-center mb-12 relative z-10">
           <div className="inline-flex items-center justify-center p-3 bg-white/10 rounded-full mb-4">
@@ -118,6 +134,7 @@ export function Simulator() {
           </div>
 
         </div>
+      </div>
       </div>
     </section>
   );
