@@ -6,36 +6,36 @@ const menuData = [
   {
     title: "Consórcio de Imóveis",
     items: [
-      { icon: <Home className="w-5 h-5 text-secondary" />, title: "Imóvel" },
-      { icon: <Map className="w-5 h-5 text-secondary" />, title: "Terreno" },
-      { icon: <Hammer className="w-5 h-5 text-secondary" />, title: "Construção e Reforma" },
+      { icon: <Home className="w-5 h-5 text-secondary" />, title: "Imóvel", href: "/consorcio/imoveis" },
+      { icon: <Map className="w-5 h-5 text-secondary" />, title: "Terreno", href: "/consorcio/imoveis" },
+      { icon: <Hammer className="w-5 h-5 text-secondary" />, title: "Construção e Reforma", href: "/consorcio/imoveis" },
     ]
   },
   {
     title: "Consórcio de Automóveis",
     items: [
-      { icon: <Car className="w-5 h-5 text-secondary" />, title: "Automóvel" },
-      { icon: <Truck className="w-5 h-5 text-secondary" />, title: "Pesados" },
+      { icon: <Car className="w-5 h-5 text-secondary" />, title: "Automóvel", href: "/consorcio/automoveis" },
+      { icon: <Truck className="w-5 h-5 text-secondary" />, title: "Pesados", href: "/consorcio/pesados" },
     ]
   },
   {
     title: "Outros Consórcios",
     items: [
-      { icon: <Sprout className="w-5 h-5 text-secondary" />, title: "Agro" },
-      { icon: <TrendingUp className="w-5 h-5 text-secondary" />, title: "Investimento" },
-      { icon: <Sun className="w-5 h-5 text-secondary" />, title: "Placa Solar" },
-      { icon: <Briefcase className="w-5 h-5 text-secondary" />, title: "Empresarial" },
+      { icon: <Sprout className="w-5 h-5 text-secondary" />, title: "Agro", href: "/consorcio/pesados" },
+      { icon: <TrendingUp className="w-5 h-5 text-secondary" />, title: "Investimento", href: "/consorcio/imoveis" },
+      { icon: <Sun className="w-5 h-5 text-secondary" />, title: "Placa Solar", href: "/consorcio/solar" },
+      { icon: <Briefcase className="w-5 h-5 text-secondary" />, title: "Empresarial", href: "/consorcio/imoveis" },
     ]
   },
   {
-    title: "A Porto Vale",
+    title: "A Corretora",
     items: [
-      { icon: <Info className="w-5 h-5 text-secondary" />, title: "Sobre Nós" },
-      { icon: <Heart className="w-5 h-5 text-secondary" />, title: "Nossa Cultura" },
-      { icon: <Users className="w-5 h-5 text-secondary" />, title: "Nossos Clientes" },
-      { icon: <Briefcase className="w-5 h-5 text-secondary" />, title: "Trabalhe Conosco" },
-      { icon: <Phone className="w-5 h-5 text-secondary" />, title: "Contato" },
-      { icon: <BookOpen className="w-5 h-5 text-secondary" />, title: "Artigos sobre Consórcio" },
+      { icon: <Info className="w-5 h-5 text-secondary" />, title: "Sobre Nós", href: "#" },
+      { icon: <Heart className="w-5 h-5 text-secondary" />, title: "Nossa Cultura", href: "#" },
+      { icon: <Users className="w-5 h-5 text-secondary" />, title: "Nossos Clientes", href: "#" },
+      { icon: <Briefcase className="w-5 h-5 text-secondary" />, title: "Trabalhe Conosco", href: "#" },
+      { icon: <Phone className="w-5 h-5 text-secondary" />, title: "Contato", href: "#" },
+      { icon: <BookOpen className="w-5 h-5 text-secondary" />, title: "Artigos sobre Consórcio", href: "#" },
     ]
   }
 ];
@@ -76,7 +76,7 @@ export function Navbar() {
                 
                 <div className="relative z-10 flex flex-col gap-1">
                   {menu.items.map((item, itemIdx) => (
-                    <a key={itemIdx} href="#" className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors group/item">
+                    <a key={itemIdx} href={item.href || "#"} className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors group/item">
                       <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center group-hover/item:bg-secondary/20 transition-colors">
                         {item.icon}
                       </div>
@@ -121,9 +121,9 @@ export function Navbar() {
               <div className={`overflow-hidden transition-all duration-300 ${activeAccordion === menu.title ? 'max-h-[500px] mb-4' : 'max-h-0'}`}>
                 <div className="flex flex-col gap-2 pl-4 border-l-2 border-secondary/20 ml-2 mt-2">
                   {menu.items.map((item, itemIdx) => (
-                    <a key={itemIdx} href="#" className="flex items-center gap-3 py-3 text-slate-600" onClick={() => setIsMobileMenuOpen(false)}>
+                    <a key={itemIdx} href={item.href || "#"} className="flex items-center gap-3 py-3 text-slate-600" onClick={() => setIsMobileMenuOpen(false)}>
                       <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
-                        {React.cloneElement(item.icon, { className: "w-4 h-4 text-secondary" })}
+                        {React.cloneElement(item.icon as React.ReactElement, { className: "w-4 h-4 text-secondary" })}
                       </div>
                       <span className="font-medium text-sm">{item.title}</span>
                     </a>

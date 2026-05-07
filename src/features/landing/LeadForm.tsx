@@ -50,7 +50,7 @@ export function LeadForm() {
                 Sua conquista a um passo.
               </h2>
               <p className="text-lg text-blue-100 mb-12">
-                Conecte-se com a Porto Vale. Enviaremos as melhores opções de crédito da Porto Seguro para o seu perfil em tempo recorde.
+                Conecte-se com a Corretora. Enviaremos as melhores opções de crédito da Porto Seguro para o seu perfil em tempo recorde.
               </p>
               
               <div className="space-y-6">

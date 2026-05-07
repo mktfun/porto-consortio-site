@@ -97,20 +97,22 @@ export function Simulator() {
             </div>
 
             {/* Resultados */}
-            <div className="lg:w-[40%] bg-primary rounded-3xl p-6 sm:p-8 text-white shadow-inner flex flex-col justify-center">
-              <div className="mb-6">
-                <p className="text-blue-200 text-xs sm:text-sm mb-1 uppercase tracking-wider font-semibold">Parcelas a partir de</p>
-                <p className="text-3xl sm:text-4xl font-bold text-white mb-2">{formatCurrency(parcelaConsorcio)}<span className="text-lg sm:text-xl font-normal text-blue-200">/mês</span></p>
-                <p className="text-xs text-blue-200/70">Prazo estimado: {prazo} meses</p>
+            <div className="lg:w-[45%] bg-gradient-to-br from-primary to-[#001838] rounded-[1.5rem] p-8 text-white shadow-2xl shadow-primary/20 flex flex-col justify-center relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+              
+              <div className="mb-6 relative z-10">
+                <p className="text-blue-200/80 text-xs sm:text-sm mb-2 uppercase tracking-wider font-semibold">Parcelas a partir de</p>
+                <p className="text-4xl sm:text-5xl font-bold text-white mb-2 tracking-tight">{formatCurrency(parcelaConsorcio)}<span className="text-lg sm:text-xl font-medium text-blue-200/60">/mês</span></p>
+                <p className="text-sm text-blue-200/70 font-medium">Prazo estimado: {prazo} meses</p>
               </div>
 
-              <div className="pt-6 border-t border-white/10 mb-6 sm:mb-8">
-                <p className="text-blue-200 text-xs sm:text-sm mb-1">Economia em relação ao financiamento:</p>
-                <p className="text-xl sm:text-2xl font-bold text-secondary">{formatCurrency(economia)}</p>
+              <div className="pt-6 border-t border-white/10 mb-8 relative z-10">
+                <p className="text-blue-200/80 text-xs sm:text-sm mb-1">Economia projetada vs. financiamento:</p>
+                <p className="text-xl sm:text-2xl font-bold text-emerald-400">{formatCurrency(economia)}</p>
               </div>
 
-              <a href="#cotacao" className="w-full bg-secondary hover:bg-secondary/90 text-white py-3 sm:py-4 rounded-xl font-bold text-center transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-300 text-sm sm:text-base">
-                Receber Proposta
+              <a href="#cotacao" className="w-full bg-secondary hover:bg-secondary/90 text-white py-4 rounded-xl font-bold text-center transition-all shadow-lg hover:shadow-secondary/30 hover:-translate-y-0.5 transform duration-300 text-sm sm:text-base relative z-10">
+                Receber Proposta Oficial
               </a>
             </div>
           </div>

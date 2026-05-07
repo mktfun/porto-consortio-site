@@ -14,6 +14,12 @@ import SobreNos from "./pages/SobreNos";
 import Privacidade from "./pages/Privacidade";
 import Termos from "./pages/Termos";
 
+// Consórcio Pages
+import Imoveis from "./pages/consorcio/Imoveis";
+import Automoveis from "./pages/consorcio/Automoveis";
+import Pesados from "./pages/consorcio/Pesados";
+import Solar from "./pages/consorcio/Solar";
+
 // Insurance pages
 import AutoFrota from "./pages/seguros/AutoFrota";
 import RctrC from "./pages/seguros/RctrC";
@@ -45,6 +51,12 @@ const App = () => (
           <Route path="/seguros/rc-dc" element={<RcDc />} />
           <Route path="/seguros/vida-em-grupo" element={<VidaEmGrupo />} />
           <Route path="/seguros/empresarial" element={<Empresarial />} />
+
+          {/* Consórcio Products */}
+          <Route path="/consorcio/imoveis" element={<Imoveis />} />
+          <Route path="/consorcio/automoveis" element={<Automoveis />} />
+          <Route path="/consorcio/pesados" element={<Pesados />} />
+          <Route path="/consorcio/solar" element={<Solar />} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
