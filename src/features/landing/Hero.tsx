@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldCheck, Clock, TrendingUp } from "lucide-react";
 
 export function Hero() {
   const container = useRef<HTMLDivElement>(null);
@@ -8,85 +8,111 @@ export function Hero() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        ".hero-text",
-        { y: 40, opacity: 0, immediateRender: false },
-        { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power3.out", delay: 0.2 }
+        ".hero-element",
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.1 }
+      );
+      
+      gsap.fromTo(
+        ".floating-card",
+        { y: 0 },
+        { y: -15, duration: 3, yoyo: true, repeat: -1, ease: "sine.inOut" }
       );
     }, container);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={container} className="relative min-h-screen flex items-end pb-16 md:pb-24 lg:pb-32 overflow-hidden bg-background">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1494412651409-8963ce7935a7?q=80&w=2070&auto=format&fit=crop"
-          alt="Port and containers at twilight"
-          className="w-full h-full object-cover scale-105" />
-        
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/75 to-background/20"></div>
+    <section ref={container} className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-primary">
+      {/* Background patterns */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-secondary/30 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#002b5c]/50 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-6 lg:px-16">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="flex flex-col lg:flex-row items-center gap-16">
           
-          {/* Main copy */}
-          <div className="max-w-3xl">
-            <div className="hero-text inline-flex items-center px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
-              <span className="w-2 h-2 rounded-full bg-accent animate-pulse mr-3"></span>
-              <span className="text-xs font-mono tracking-widest text-slate-300 uppercase">Corretora Especialista Porto Seguro</span>
+          {/* Text Content */}
+          <div className="w-full lg:w-1/2">
+            <div className="hero-element inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6">
+              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse mr-2"></span>
+              <span className="text-xs font-semibold tracking-wide text-white">Especialista Porto Consórcio</span>
             </div>
             
-            <h1 className="hero-text text-4xl sm:text-5xl md:text-6xl xl:text-[5.5rem] leading-[1.05] tracking-tight text-white mb-6">
-              <span className="block font-bold mb-2">A REALIZAÇÃO DO SEU SONHO SEM</span>
-              <span className="block font-drama italic text-accent">Pagar Juros.</span>
+            <h1 className="hero-element text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">
+              O jeito mais <span className="text-secondary italic font-drama">inteligente</span> de conquistar o seu sonho.
             </h1>
             
-            <p className="hero-text text-base md:text-lg lg:text-xl text-slate-400 max-w-2xl font-light leading-relaxed mb-10">
-              Compre seu imóvel, carro ou caminhão sem pagar juros abusivos de financiamento. Parcelas que cabem no seu bolso com a segurança da maior seguradora do país.
+            <p className="hero-element text-lg text-blue-100 mb-8 max-w-lg leading-relaxed">
+              Carro, moto, imóvel ou energia solar. Sem pagar juros abusivos, com parcelas que cabem no seu bolso e a segurança da Porto Seguro.
             </p>
             
-            <div className="hero-text flex flex-col sm:flex-row gap-4">
-              <a href="#cotacao" className="magnetic-btn bg-white text-background px-8 py-4 rounded-full font-bold text-center inline-flex justify-center items-center hover:bg-slate-100 transition-colors">
-                <span className="relative z-10 flex items-center text-sm md:text-base">
-                  Fazer Simulação Online <ArrowRight className="w-5 h-5 ml-2" />
-                </span>
-              </a>
-              <a href="#diferencial" className="px-8 py-4 rounded-full font-semibold text-white border border-white/20 hover:bg-white/5 transition-colors text-center text-sm md:text-base">
-                Entender o Consórcio
+            <div className="hero-element flex flex-col sm:flex-row gap-4">
+              <a href="#simulador" className="magnetic-btn bg-white text-primary px-8 py-4 rounded-full font-bold text-center inline-flex justify-center items-center hover:bg-gray-50 transition-colors shadow-xl">
+                Simular Agora <ArrowRight className="w-5 h-5 ml-2" />
               </a>
             </div>
-          </div>
 
-          {/* Stats — visible only on large screens */}
-          <div className="hero-text hidden lg:flex flex-col gap-6 text-right pb-4 flex-shrink-0">
-            <div>
-              <p className="text-4xl font-drama text-white">100%</p>
-              <p className="text-sm font-mono tracking-widest text-slate-500 mt-1 uppercase">Segurança Garantida</p>
-            </div>
-            <div>
-              <p className="text-4xl font-drama text-white">24/7</p>
-              <p className="text-sm font-mono tracking-widest text-slate-500 mt-1 uppercase">Monitoramento & Suporte</p>
-            </div>
-          </div>
-
-          {/* Stats — only visible on mobile/tablet as a horizontal row */}
-          <div className="hero-text flex lg:hidden items-center gap-8">
-            <div>
-              <p className="text-3xl font-bold text-white">100%</p>
-              <p className="text-xs font-mono tracking-widest text-slate-500 mt-1 uppercase">Segurança</p>
-            </div>
-            <div className="w-px h-10 bg-white/10"></div>
-            <div>
-              <p className="text-3xl font-bold text-white">24/7</p>
-              <p className="text-xs font-mono tracking-widest text-slate-500 mt-1 uppercase">Suporte</p>
+            <div className="hero-element flex items-center gap-6 mt-10 text-sm text-blue-100 font-medium">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-secondary" />
+                <span>100% Seguro</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-secondary" />
+                <span>Zero Juros</span>
+              </div>
             </div>
           </div>
 
+          {/* Visual Elements (Floating Cards) */}
+          <div className="w-full lg:w-1/2 relative min-h-[400px] hidden md:block">
+            {/* Main glass card */}
+            <div className="hero-element glass absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm rounded-[2rem] p-8 z-10">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-bold text-primary text-xl">Simulação de Imóvel</h3>
+                <div className="bg-primary/10 text-primary text-xs px-2 py-1 rounded font-semibold">Porto Seguro</div>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-slate-500 mb-1">Crédito desejado</p>
+                  <p className="text-3xl font-bold text-slate-800">R$ 500.000</p>
+                </div>
+                
+                <div className="pt-4 border-t border-slate-100">
+                  <p className="text-sm text-slate-500 mb-1">Parcela estimada a partir de</p>
+                  <p className="text-2xl font-bold text-secondary">R$ 2.450<span className="text-sm font-normal text-slate-500">/mês</span></p>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating decorator card 1 */}
+            <div className="hero-element floating-card glass-dark absolute top-0 right-10 rounded-2xl p-4 flex items-center gap-4 z-20">
+              <div className="bg-white/20 p-2 rounded-full">
+                <Clock className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-white font-bold text-sm">Contemplação</p>
+                <p className="text-blue-200 text-xs">Sorteios mensais</p>
+              </div>
+            </div>
+            
+            {/* Floating decorator card 2 */}
+            <div className="hero-element floating-card glass-dark absolute bottom-10 left-0 rounded-2xl p-4 flex items-center gap-4 z-20" style={{ animationDelay: '1.5s' }}>
+              <div className="bg-white/20 p-2 rounded-full">
+                <TrendingUp className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-white font-bold text-sm">Investimento</p>
+                <p className="text-blue-200 text-xs">Poder de compra à vista</p>
+              </div>
+            </div>
+          </div>
+          
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }

@@ -2,23 +2,24 @@ import React from "react";
 import { Navbar } from "@/features/landing/Navbar";
 import { Hero } from "@/features/landing/Hero";
 import { Features } from "@/features/landing/Features";
-import { Philosophy } from "@/features/landing/Philosophy";
-import { Protocol } from "@/features/landing/Protocol";
+import { Products } from "@/features/landing/Products";
+import { Simulator } from "@/features/landing/Simulator";
+import { Advantages } from "@/features/landing/Advantages";
 import { LeadForm } from "@/features/landing/LeadForm";
 import { Footer } from "@/features/landing/Footer";
 
 export default function Index() {
   return (
-    <div className="bg-background text-foreground antialiased selection:bg-primary/30 selection:text-white">
+    <div className="bg-background text-foreground antialiased selection:bg-primary/30 selection:text-slate-900">
       {/* Global Noise Overlay */}
       <div className="noise-overlay"></div>
 
-      {/* Corporate Luxe Layout Assembly */}
       <Navbar />
       <Hero />
+      <Products />
+      <Simulator />
+      <Advantages />
       <Features />
-      <Protocol />
-      <Philosophy />
       <LeadForm />
       <Footer />
 
