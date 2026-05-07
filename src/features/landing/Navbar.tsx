@@ -57,7 +57,7 @@ export function Navbar() {
         
         {/* Logo */}
         <a href="/" className="flex items-center gap-2 z-50 shrink-0">
-          <img src="/logo_header.jpeg" alt="Portal Porto Consórcio" className="h-8 md:h-10 lg:h-11 max-w-[180px] md:max-w-[220px] lg:max-w-[260px] object-contain rounded-[40px]" />
+          <img src="/logo_header.jpeg" alt="Portal Porto Consórcio" className="h-8 md:h-10 lg:h-11 max-w-[180px] md:max-w-[220px] lg:max-w-[260px] object-contain" />
         </a>
 
         {/* Desktop Navigation */}

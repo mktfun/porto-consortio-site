@@ -1,39 +1,20 @@
-const Jimp = require('jimp');
+import sharp from 'sharp';
 
 async function main() {
-  const image = await Jimp.read('public/favicon.jpeg');
-  const w = image.bitmap.width;
-  const h = image.bitmap.height;
+  const image = sharp('public/favicon.jpeg');
+  const metadata = await image.metadata();
   
-  const radius = 40;
+  const w = metadata.width;
+  const h = metadata.height;
+  const r = 40; // 40px radius
   
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
-      let isOutside = false;
-      
-      // Top left
-      if (x < radius && y < radius) {
-        if (Math.pow(x - radius, 2) + Math.pow(y - radius, 2) > Math.pow(radius, 2)) isOutside = true;
-      }
-      // Top right
-      else if (x >= w - radius && y < radius) {
-        if (Math.pow(x - (w - radius) + 1, 2) + Math.pow(y - radius, 2) > Math.pow(radius, 2)) isOutside = true;
-      }
-      // Bottom left
-      else if (x < radius && y >= h - radius) {
-        if (Math.pow(x - radius, 2) + Math.pow(y - (h - radius) + 1, 2) > Math.pow(radius, 2)) isOutside = true;
-      }
-      // Bottom right
-      else if (x >= w - radius && y >= h - radius) {
-        if (Math.pow(x - (w - radius) + 1, 2) + Math.pow(y - (h - radius) + 1, 2) > Math.pow(radius, 2)) isOutside = true;
-      }
-      
-      if (isOutside) {
-        image.setPixelColor(0x00000000, x, y); // transparent
-      }
-    }
-  }
+  const rect = Buffer.from(
+    `<svg><rect x="0" y="0" width="${w}" height="${h}" rx="${r}" ry="${r}" /></svg>`
+  );
   
-  await image.writeAsync('public/favicon.png');
+  await image
+    .composite([{ input: rect, blend: 'dest-in' }])
+    .png()
+    .toFile('public/favicon.png');
 }
-main();
+main().catch(console.error);
