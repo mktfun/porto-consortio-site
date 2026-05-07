@@ -35,30 +35,40 @@ export function Simulator() {
   };
 
   const containerRef = useRef<HTMLElement>(null);
+  
+  // Anima do momento que entra na tela até encostar no topo
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start center", "end start"]
+    offset: ["start end", "start start"]
   });
 
-  const borderRadius = useTransform(scrollYProgress, [0, 0.4], ["100%", "0%"]);
-  const scale = useTransform(scrollYProgress, [0, 0.4], [1.5, 1]);
-  const y = useTransform(scrollYProgress, [0, 0.4], ["30%", "0%"]);
+  const borderRadius = useTransform(scrollYProgress, [0, 1], ["50% 50% 0 0", "0% 0% 0 0"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1.5, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], ["20%", "0%"]);
 
   return (
-    <section ref={containerRef} id="simulador" className="h-[150vh] relative bg-slate-50">
+    <section ref={containerRef} id="simulador" className="h-[200vh] -mb-[100vh] relative bg-slate-50">
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 bg-slate-50 z-0"></div>
       
       <motion.div 
         style={{ borderRadius, scale, y }}
-        className="absolute bottom-0 left-0 right-0 h-[800px] bg-primary origin-bottom z-0" 
-      />
+        className="absolute bottom-0 left-[-10%] right-[-10%] h-[120%] bg-primary origin-bottom z-0 overflow-hidden shadow-2xl" 
+      >
+        {/* Premium background image */}
+        <img 
+          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop" 
+          alt="Arquitetura moderna" 
+          className="w-full h-full object-cover opacity-10 mix-blend-overlay"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
+      </motion.div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 w-full pt-10">
         
         <div className="text-center mb-12 relative z-10">
-          <div className="inline-flex items-center justify-center p-3 bg-white/10 rounded-full mb-4">
+          <div className="inline-flex items-center justify-center p-3 bg-white/10 backdrop-blur-sm rounded-full mb-4">
             <Calculator className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Simulador de Consórcio</h2>
