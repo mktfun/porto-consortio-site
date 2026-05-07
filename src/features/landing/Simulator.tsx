@@ -1,18 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Calculator } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export function Simulator() {
   const [type, setType] = useState<"imovel" | "automovel">("imovel");
   const [mode, setMode] = useState<"credito" | "parcela">("credito");
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
   
   // Imóvel: crédito de 100k a 1M
   // Automóvel: crédito de 50k a 300k
@@ -53,15 +45,25 @@ export function Simulator() {
 
   return (
     <section ref={containerRef} id="simulador" className="md:h-[200vh] md:-mb-[100vh] relative bg-slate-50">
-      <div className="md:sticky top-0 md:h-screen w-full flex flex-col justify-center overflow-hidden py-20 md:py-0">
+      <div className="md:sticky top-0 md:h-screen w-full flex flex-col justify-center overflow-hidden py-16 md:py-0">
       {/* Background elements */}
       <div className="absolute inset-0 bg-slate-50 z-0"></div>
       
+      {/* Mobile Static Background */}
+      <div className="absolute inset-0 bg-primary z-0 overflow-hidden shadow-2xl md:hidden">
+        <img 
+          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop" 
+          alt="Arquitetura moderna" 
+          className="w-full h-full object-cover opacity-10 mix-blend-overlay"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
+      </div>
+
+      {/* Desktop Animated Background */}
       <motion.div 
-        style={isMobile ? {} : { borderRadius, scale, y }}
-        className={`absolute z-0 overflow-hidden shadow-2xl bg-primary ${isMobile ? 'inset-0' : 'bottom-0 left-[-10%] right-[-10%] h-[120%] origin-bottom'}`} 
+        style={{ borderRadius, scale, y }}
+        className="hidden md:block absolute bottom-0 left-[-10%] right-[-10%] h-[120%] bg-primary origin-bottom z-0 overflow-hidden shadow-2xl" 
       >
-        {/* Premium background image */}
         <img 
           src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop" 
           alt="Arquitetura moderna" 
