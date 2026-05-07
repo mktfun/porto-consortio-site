@@ -53,18 +53,18 @@ export function Navbar() {
 
   return (
     <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-3' : 'bg-white py-5'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 xl:px-6 flex items-center justify-between gap-2 xl:gap-6">
         
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2 z-50">
-          <img src="/logo_header.jpeg" alt="Portal Porto Consórcio" className="h-10 md:h-12 object-contain" />
+        <a href="/" className="flex items-center gap-2 z-50 shrink-0">
+          <img src="/logo_header.jpeg" alt="Portal Porto Consórcio" className="h-8 md:h-10 lg:h-11 max-w-[180px] md:max-w-[220px] lg:max-w-[260px] object-contain rounded-[40px]" />
         </a>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
+        <nav className="hidden lg:flex items-center space-x-3 xl:space-x-6">
           {menuData.map((menu, idx) => (
             <div key={idx} className="group relative">
-              <button className="flex items-center gap-1 text-slate-600 font-semibold hover:text-secondary transition-colors text-sm xl:text-base py-2">
+              <button className="flex items-center gap-1 text-slate-600 font-semibold hover:text-secondary transition-colors text-xs xl:text-sm py-2 whitespace-nowrap">
                 {menu.title}
                 <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform duration-300" />
               </button>
@@ -77,10 +77,10 @@ export function Navbar() {
                 <div className="relative z-10 flex flex-col gap-1">
                   {menu.items.map((item, itemIdx) => (
                     <a key={itemIdx} href={item.href || "#"} className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors group/item">
-                      <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center group-hover/item:bg-secondary/20 transition-colors">
+                      <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center group-hover/item:bg-secondary/20 transition-colors shrink-0">
                         {item.icon}
                       </div>
-                      <span className="text-slate-700 font-medium text-sm group-hover/item:text-slate-900">{item.title}</span>
+                      <span className="text-slate-700 font-medium text-sm group-hover/item:text-slate-900 leading-tight">{item.title}</span>
                     </a>
                   ))}
                 </div>
@@ -90,8 +90,8 @@ export function Navbar() {
         </nav>
 
         {/* CTA & Mobile Toggle */}
-        <div className="flex items-center gap-4 z-50">
-          <a href="#simulador" className="hidden lg:inline-flex items-center justify-center bg-secondary hover:bg-secondary/90 text-white font-bold rounded-full px-6 py-3 transition-colors shadow-md hover:shadow-lg">
+        <div className="flex items-center gap-4 z-50 shrink-0">
+          <a href="#simulador" className="hidden lg:inline-flex items-center justify-center bg-secondary hover:bg-secondary/90 text-white font-bold rounded-full px-5 xl:px-6 py-2.5 xl:py-3 transition-colors shadow-md hover:shadow-lg text-sm xl:text-base whitespace-nowrap">
             Faça sua simulação <ArrowRight className="w-4 h-4 ml-2" />
           </a>
           
